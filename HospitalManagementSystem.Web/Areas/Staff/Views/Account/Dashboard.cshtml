@@ -1,0 +1,12 @@
+﻿@using HospitalManagementSystem.Models.Models
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor accessor
+@{
+	var userDetails = JsonConvert.DeserializeObject<UserModel>(accessor.HttpContext.Session.GetString("User"));
+}
+
+<h1>Staff Dashboard</h1>
+<h1>User Name :  @(userDetails.FirstName)</h1>
+<h1>User Id :  @(userDetails.Id)</h1>
+
