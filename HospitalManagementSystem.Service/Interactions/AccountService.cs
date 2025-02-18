@@ -67,7 +67,7 @@ namespace HospitalManagementSystem.Service.Interactions
                 if (userMasterObj.Password != password)
                 {
                     returnResponseModel.status = false;
-                    returnResponseModel.message = "Wrong Password.";
+                    returnResponseModel.message = "Wrong Password. ";
                 }
                 else if (!userMasterObj.isActive)
                 {
