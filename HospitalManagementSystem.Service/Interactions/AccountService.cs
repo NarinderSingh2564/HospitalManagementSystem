@@ -2,7 +2,6 @@
 using HospitalManagementSystem.Data;
 using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace HospitalManagementSystem.Service.Interactions
 {

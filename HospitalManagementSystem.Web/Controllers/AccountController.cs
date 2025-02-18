@@ -61,10 +61,7 @@ namespace HospitalManagementSystem.Web.Controllers
             return View(loginUIModel);
         }
 
-        public IActionResult Success()
-        {
-            return View();
-        }
+
 
     }
 }
