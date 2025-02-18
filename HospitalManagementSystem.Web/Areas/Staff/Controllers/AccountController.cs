@@ -16,5 +16,6 @@ namespace HospitalManagementSystem.Web.Areas.Staff.Controllers
         {
             return View();
         }
+       
     }
 }
