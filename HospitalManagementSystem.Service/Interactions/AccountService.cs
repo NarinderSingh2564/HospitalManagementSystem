@@ -56,7 +56,7 @@ namespace HospitalManagementSystem.Service.Interactions
         }
 
         #endregion
-        public ReturnResponseModel<UserModel> Login(string email, string password)
+        public ReturnResponseModel<UserModel> LoginCredentialCheck(string email, string password)
         {
             var returnResponseModel = new ReturnResponseModel<UserModel>();
 
