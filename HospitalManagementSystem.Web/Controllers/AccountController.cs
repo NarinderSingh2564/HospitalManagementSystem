@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 
 namespace HospitalManagementSystem.Web.Controllers
 {
-
     public class AccountController : Controller
     {
         private readonly IAccountRepository _logger;
@@ -20,10 +19,17 @@ namespace HospitalManagementSystem.Web.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            var loginUIModel = new LoginUIModel();
+            var loginUIModel = new LoginUIModel
+            {
+                Email = "amrit@gmail.com",
+                Password = "admin123"
+            };
 
-            loginUIModel.Email = "amrit@gmail.com";
-            loginUIModel.Password = "admin123";
+            if (TempData["ErrorMessage"] != null)
+            {
+                loginUIModel.Message = TempData["ErrorMessage"].ToString();
+                loginUIModel.status = false;
+            }
 
             return View(loginUIModel);
         }
@@ -31,37 +37,34 @@ namespace HospitalManagementSystem.Web.Controllers
         [HttpPost]
         public IActionResult Login(LoginUIModel loginUIModel)
         {
-            var loginUIObject = new LoginUIModel();
             try
             {
+                ModelState.Clear();
 
-                loginUIObject.Email = loginUIModel.Email;
-                loginUIObject.Password = loginUIModel.Password;
-
-                var returnResponse = _logger.Login(loginUIObject.Email, loginUIObject.Password);
+                var returnResponse = _logger.CheckLoginDetails(loginUIModel.Email, loginUIModel.Password);
 
                 if (returnResponse.status)
                 {
                     HttpContext.Session.SetString("User", JsonConvert.SerializeObject(returnResponse.Data));
                     return RedirectToAction("Dashboard", "Account", new { area = "Staff" });
                 }
-
                 else
                 {
                     loginUIModel.status = false;
                     loginUIModel.Message = returnResponse.message;
+
+                    TempData["ErrorMessage"] = loginUIModel.Message;
                 }
             }
             catch (Exception ex)
             {
                 loginUIModel.status = false;
                 loginUIModel.Message = ex.Message;
+
+                TempData["ErrorMessage"] = ex.Message;
             }
-            
-            return View(loginUIModel);
+
+            return RedirectToAction("Login");
         }
-
-
-
     }
 }

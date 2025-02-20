@@ -13,11 +13,11 @@ namespace HospitalManagementSystem.Repository.Concrete
         {
             _dBContext = applicationDBContext;
         }
-        public ReturnResponseModel<UserModel> Login(string email, string password)
+        public ReturnResponseModel<UserModel> CheckLoginDetails(string email, string password)
         {
             using (AccountService accountService = new AccountService(_dBContext))
             {
-                return accountService.Login(email,password);
+                return accountService.LoginCredentialCheck(email,password);
             }
         }
     }

@@ -5,6 +5,6 @@ namespace HospitalManagementSystem.Repository.Abstract
 {
     public interface IAccountRepository
     {
-        ReturnResponseModel<UserModel> Login(string email, string password);
+        ReturnResponseModel<UserModel> CheckLoginDetails(string email, string password);
     }
 }
