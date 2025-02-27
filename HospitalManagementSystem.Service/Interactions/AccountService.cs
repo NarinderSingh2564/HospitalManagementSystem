@@ -1,17 +1,15 @@
 ﻿using System.ComponentModel;
 using HospitalManagementSystem.Data;
+using HospitalManagementSystem.Data.DBClasses;
 using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.Models;
 
 namespace HospitalManagementSystem.Service.Interactions
 {
-    public class AccountService:IDisposable
+    public class AccountService : IDisposable
     {
         #region Private Variables
-
         private ApplicationDBContext _dbcontext;
-
-        
 
         private Component component = new Component();
         private bool disposed = false;
@@ -36,11 +34,9 @@ namespace HospitalManagementSystem.Service.Interactions
 
         [System.Runtime.InteropServices.DllImport("Kernel32")]
         private extern static Boolean CloseHandle(IntPtr handle);
-
         #endregion
 
         #region Constructor
-
         public AccountService(ApplicationDBContext dBContext)
         {
             _dbcontext = dBContext;
@@ -60,33 +56,31 @@ namespace HospitalManagementSystem.Service.Interactions
         {
             var returnResponseModel = new ReturnResponseModel<UserModel>();
 
-            var userMasterObj = _dbcontext.UserMaster.Where(u => u.Email == email).FirstOrDefault();
+            dynamic dbUserMasterObj = _dbcontext.UserMaster.FirstOrDefault(u => u.Email == email) ??
+                (dynamic) (_dbcontext.PatientMaster.FirstOrDefault(p => p.Email == email));
 
-            if (userMasterObj != null)
+            if (dbUserMasterObj != null)
             {
-                if (userMasterObj.Password != password)
+                if (dbUserMasterObj.Password != password)
                 {
                     returnResponseModel.status = false;
                     returnResponseModel.message = "Wrong Password. ";
                 }
-                else if (!userMasterObj.isActive)
+                else if (!dbUserMasterObj.isActive)
                 {
                     returnResponseModel.status = false;
                     returnResponseModel.message = "User is not active";
                 }
                 else
                 {
-                    returnResponseModel.status = true;
                     returnResponseModel.Data = new UserModel
                     {
-                        FirstName = string.Concat(userMasterObj.FirstName, " ", userMasterObj.LastName),
-                        //Designation = userMasterObj.DesignationMaster.DesignationName,
-                        Designation = userMasterObj.DesignationMaster != null ? userMasterObj.DesignationMaster.DesignationName : "No Designation",
-                        isActive = userMasterObj.isActive,
-                        IsDoctor = userMasterObj.IsDoctor
-                        
+                        FirstName = string.Concat(dbUserMasterObj.FirstName, " ", dbUserMasterObj.LastName),
+                        IsStaff = dbUserMasterObj?.IsStaff != null ? dbUserMasterObj.IsStaff : null,
+                        Area = dbUserMasterObj.IsStaff != null ? "Staff" : "Patient",
                     };
-                    returnResponseModel.message = $"User: {userMasterObj.FirstName} {userMasterObj.LastName}, Active: {userMasterObj.isActive}";
+
+                    returnResponseModel.status = true;
                 }
             }
             else
@@ -97,6 +91,5 @@ namespace HospitalManagementSystem.Service.Interactions
 
             return returnResponseModel;
         }
-
     }
 }
