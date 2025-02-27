@@ -1,204 +1,211 @@
 ﻿@model HospitalManagementSystem.Models.UIModels.LoginUIModel;
 
 @{
-    ViewData["Title"] = "Login";
-    Layout = null;
+	ViewData["Title"] = "Login";
+	Layout = null;
 }
+
 
 <script src="~/theme/js/core/jquery-3.7.1.min.js"></script>
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 
 <style>
-    .login-container {
-        margin-top: 5%;
-        margin-bottom: 5%;
-    }
+	.login-container {
+		margin-top: 5%;
+		margin-bottom: 5%;
+	}
 
-    .login-form-1 {
-        padding: 5%;
-        box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
-    }
+	.login-form-1 {
+		padding: 5%;
+		box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+	}
 
-        .login-form-1 h3 {
-            text-align: center;
-            color: #333;
-        }
+		.login-form-1 h3 {
+			text-align: center;
+			color: #333;
+		}
 
-    .login-form-2 {
-        padding: 5%;
-        background: #0062cc;
-        box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
-    }
+	.login-form-2 {
+		padding: 5%;
+		background: #0062cc;
+		box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+	}
 
-        .login-form-2 h3 {
-            text-align: center;
-            color: #fff;
-        }
+		.login-form-2 h3 {
+			text-align: center;
+			color: #fff;
+		}
 
-    .login-container form {
-        padding: 10%;
-    }
+	.login-container form {
+		padding: 10%;
+	}
 
-    .btnSubmit {
-        width: 50%;
-        border-radius: 1rem;
-        padding: 1.5%;
-        border: none;
-        cursor: pointer;
-    }
+	.btnSubmit {
+		width: 50%;
+		border-radius: 1rem;
+		padding: 1.5%;
+		border: none;
+		cursor: pointer;
+	}
 
-    .login-form-1 .btnSubmit {
-        font-weight: 600;
-        color: #fff;
-        background-color: #0062cc;
-    }
+	.login-form-1 .btnSubmit {
+		font-weight: 600;
+		color: #fff;
+		background-color: #0062cc;
+	}
 
-    .login-form-2 .btnSubmit {
-        font-weight: 600;
-        color: #0062cc;
-        background-color: #fff;
-    }
+	.login-form-2 .btnSubmit {
+		font-weight: 600;
+		color: #0062cc;
+		background-color: #fff;
+	}
 
-    .login-form-2 .ForgetPwd {
-        color: #fff;
-        font-weight: 600;
-        text-decoration: none;
-    }
+	.login-form-2 .ForgetPwd {
+		color: #fff;
+		font-weight: 600;
+		text-decoration: none;
+	}
 
-    .login-form-1 .ForgetPwd {
-        color: #0062cc;
-        font-weight: 600;
-        text-decoration: none;
-    }
+	.login-form-1 .ForgetPwd {
+		color: #0062cc;
+		font-weight: 600;
+		text-decoration: none;
+	}
 
-    .alert {
-        margin-bottom: 5px;
-    }
+	.alert {
+		margin-bottom: 5px;
+	}
 </style>
 
 <div class="container">
-    <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <div class="panel-title">Sign In</div>
-                <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>
-            </div>
-            <div style="padding-top:30px" class="panel-body">
-                @using (Html.BeginForm("Login", "Account", FormMethod.Post))
-                {
-                    @if (Model.status == false && !string.IsNullOrEmpty(Model.Message))
-                    {
-                        <div class="alert alert-danger alert-dismissible mb-0" role="alert">
-                            @(Model.Message)
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    }
+	<div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<div class="panel-title">Sign In</div>
+				<div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>
+			</div>
+			<div style="padding-top:30px" class="panel-body">
+				@* @using (Html.BeginForm("Login", "Account", FormMethod.Post)) *@
+				@* { *@
+				<form method="post" class="row">
+					@if (Model.status == false && !string.IsNullOrEmpty(Model.Message))
+					{
+						<div class="alert alert-danger alert-dismissible mb-0" role="alert">
+							@(Model.Message)
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					}
 
-                    <div style="margin-bottom: 25px" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", value = Model.Email ?? "amrit@gmail.com" } })
-                    </div>
+					<div style="margin-bottom: 25px; margin-left: 5px; margin-right: 5px" class="input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+						@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", value = Model.Email ?? "amrit@gmail.com" } })
+					</div>
 
-                    <div style="margin-bottom: 25px" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", value = Model.Password ?? "admin123" } })
-                    </div>
+					<div style="margin-bottom: 25px; margin-left: 5px; margin-right: 5px" class="input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+						@Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", value = Model.Password ?? "admin123" } })
+					</div>
 
-                    <div class="input-group">
-                        <div class="checkbox">
-                            <label>
-                                <input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
-                            </label>
-                        </div>
-                    </div>
+					<div class="input-group" style="margin-left: 5px">
+						<div class="checkbox">
+							<label>
+								<input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
+							</label>
+						</div>
+					</div>
 
-                    <div style="margin-top:10px" class="form-group">
-                        <div class="col-sm-12 controls">
-                            <button type="submit" name="btnLogin" id="btnLogin" class="btn btn-success">Sign in</button>
-                            <a id="btn-fblogin" href="#" class="btn btn-primary">Login with Facebook</a>
-                        </div>
-                    </div>
-                    <br />
-                    <br />
-                    <div class="form-group">
-                        <div class="col-md-12 control">
-                            <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
-                                Don't have an account!
-                                <a href="#" onClick="$('#loginbox').hide(); $('#signupbox').show()">
-                                    Sign Up Here
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
+					<div style="margin-top:10px" class="form-group">
+						<div class="col-sm-12 controls">
+							<button type="submit" name="btnLogin" id="btnLogin" class="btn btn-success">Sign in</button>
+							<a id="btn-fblogin" href="#" class="btn btn-primary">Login with Facebook</a>
+						</div>
+					</div>
+					<br />
+					<br />
+					<div class="form-group">
+						<div class="col-md-12 control">
+							<div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+								Don't have an account!
+								<a href="#" onClick="$('#loginbox').hide(); $('#signupbox').show()">
+									Sign Up Here
+								</a>
+							</div>
+						</div>
+					</div>
+					@* } *@
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
 
 
 <div id="signupbox" style="display:none; margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <div class="panel-title">Sign Up</div>
-            <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a></div>
-        </div>
-        <div class="panel-body">
-            <form id="signupform" class="form-horizontal" role="form">
-                <div id="signupalert" style="display:none" class="alert alert-danger">
-                    <p>Error:</p>
-                    <span></span>
-                </div>
-                <div class="form-group">
-                    <label for="email" class="col-md-3 control-label">Email</label>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" name="email" placeholder="Email Address">
-                        @* @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } }) *@
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="firstname" class="col-md-3 control-label">First Name</label>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" name="firstname" placeholder="First Name">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="lastname" class="col-md-3 control-label">Last Name</label>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" name="lastname" placeholder="Last Name">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="password" class="col-md-3 control-label">Password</label>
-                    <div class="col-md-9">
-                        <input type="password" class="form-control" name="passwd" placeholder="Password">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="icode" class="col-md-3 control-label">Invitation Code</label>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" name="icode" placeholder="">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <!-- Button -->
-                    <div class="col-md-offset-3 col-md-9">
-                        <button id="btn-signup" type="button" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp Sign Up</button>
-                        <span style="margin-left:8px;">or</span>
-                    </div>
-                </div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<div class="panel-title">Sign Up</div>
+			<div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a></div>
+		</div>
+		<div class="panel-body">
+			<form id="signupform" class="form-horizontal" role="form">
+				<div id="signupalert" style="display:none" class="alert alert-danger">
+					<p>Error:</p>
+					<span></span>
+				</div>
+				<div class="form-group">
+					<label for="email" class="col-md-3 control-label">Email</label>
+					<div class="col-md-9">
+						<input type="text" class="form-control" name="email" placeholder="Email Address">
+						@* @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } }) *@
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="firstname" class="col-md-3 control-label">First Name</label>
+					<div class="col-md-9">
+						<input type="text" class="form-control" name="firstname" placeholder="First Name">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="lastname" class="col-md-3 control-label">Last Name</label>
+					<div class="col-md-9">
+						<input type="text" class="form-control" name="lastname" placeholder="Last Name">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="password" class="col-md-3 control-label">Password</label>
+					<div class="col-md-9">
+						<input type="password" class="form-control" name="passwd" placeholder="Password">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="icode" class="col-md-3 control-label">Invitation Code</label>
+					<div class="col-md-9">
+						<input type="text" class="form-control" name="icode" placeholder="">
+					</div>
+				</div>
+				<div class="form-group">
+					<!-- Button -->
+					<div class="col-md-offset-3 col-md-9">
+						<button id="btn-signup" type="button" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp Sign Up</button>
+						<span style="margin-left:8px;">or</span>
+						<button id="btn-fbsignup" type="button" class="btn btn-primary" style="margin-left:8px;"><i class="icon-facebook"></i>   Sign Up with Facebook</button>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-12 control">
+						<div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+							Already have an account!
+							<a href="#" onClick="$('#signupbox').hide(); $('#loginbox').show()">
+								Sign In Here
+							</a>
+						</div>
+					</div>
+				</div>
 
-                <div style="border-top: 1px solid #999; padding-top:20px" class="form-group">
-
-                    <div class="col-md-offset-3 col-md-9">
-                        <button id="btn-fbsignup" type="button" class="btn btn-primary"><i class="icon-facebook"></i>   Sign Up with Facebook</button>
-                    </div>
-
-                </div>
-            </form>
-        </div>
-    </div>
+			</form>
+		</div>
+	</div>
 </div>

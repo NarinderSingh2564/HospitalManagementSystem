@@ -13,10 +13,12 @@ namespace HospitalManagementSystem.Data.DBClasses
         public virtual DepartmentMaster DepartmentMaster { get; set; }
 
         [Required]
+        [StringLength(50)]
         [Column(TypeName = "varchar(50)")]
         public string DesignationName { get; set; }
 
         [Required]
+        [StringLength(8)]
         [Column(TypeName = "varchar(8)")]
         public string DesignationCode { get; set; }
 

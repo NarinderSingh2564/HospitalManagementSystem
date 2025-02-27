@@ -9,11 +9,12 @@ namespace HospitalManagementSystem.Data
         {
 
         }
+        public DbSet<AddressMaster> AddressMasters { get; set; }
         public DbSet<DepartmentMaster> DepartmentMaster { get; set; }
         public DbSet<DesignationMaster> DesignationMaster { get; set; }
-
         public DbSet<UserMaster> UserMaster { get; set; }
-        public DbSet<AddressMaster> AddressMasters { get; set; }
+        public DbSet<PatientMaster> PatientMaster { get; set; }
+        public DbSet<PatientMedicalHistoryMaster> PatientMedicalHistoryMaster { get; set; }
 
     }
 }

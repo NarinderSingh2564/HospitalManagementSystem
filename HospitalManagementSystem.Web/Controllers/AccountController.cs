@@ -21,16 +21,9 @@ namespace HospitalManagementSystem.Web.Controllers
         {
             var loginUIModel = new LoginUIModel
             {
-                Email = "amrit@gmail.com",
-                Password = "admin123"
+                Email = "rohan@gmail.com",
+                Password = "abc123"
             };
-
-            if (TempData["ErrorMessage"] != null)
-            {
-                loginUIModel.Message = TempData["ErrorMessage"].ToString();
-                loginUIModel.status = false;
-            }
-
             return View(loginUIModel);
         }
 
@@ -39,32 +32,25 @@ namespace HospitalManagementSystem.Web.Controllers
         {
             try
             {
-                ModelState.Clear();
-
                 var returnResponse = _logger.CheckLoginDetails(loginUIModel.Email, loginUIModel.Password);
 
                 if (returnResponse.status)
                 {
                     HttpContext.Session.SetString("User", JsonConvert.SerializeObject(returnResponse.Data));
-                    return RedirectToAction("Dashboard", "Account", new { area = "Staff" });
+                    return RedirectToAction("Dashboard", "Account", new { area = returnResponse.Data.Area });
                 }
                 else
                 {
                     loginUIModel.status = false;
                     loginUIModel.Message = returnResponse.message;
-
-                    TempData["ErrorMessage"] = loginUIModel.Message;
                 }
             }
             catch (Exception ex)
             {
                 loginUIModel.status = false;
                 loginUIModel.Message = ex.Message;
-
-                TempData["ErrorMessage"] = ex.Message;
             }
-
-            return RedirectToAction("Login");
+            return View("Login", loginUIModel);
         }
     }
 }

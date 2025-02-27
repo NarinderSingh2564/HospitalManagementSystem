@@ -8,10 +8,12 @@ namespace HospitalManagementSystem.Data.DBClasses
         public int Id { get; set; }
 
         [Required]
+        [StringLength(60)]
         [Column(TypeName = "varchar(60)")]
         public string DepartmentName { get; set; }
 
         [Required]
+        [StringLength(8)]
         [Column(TypeName ="varchar(8)")]
         public string DepartmentCode { get; set; }
 
