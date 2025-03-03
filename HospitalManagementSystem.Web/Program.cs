@@ -11,6 +11,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(x => x.UseSqlServer(builder.
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
 
 builder.Services.AddSession(options =>
 {

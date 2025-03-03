@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using HospitalManagementSystem.Data;
-using HospitalManagementSystem.Data.DBClasses;
 using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.Models;
 
@@ -41,16 +40,13 @@ namespace HospitalManagementSystem.Service.Interactions
         {
             _dbcontext = dBContext;
         }
-
         #endregion
 
         #region Destructor
-
         ~AccountService()
         {
             Dispose(false);
         }
-
         #endregion
         public ReturnResponseModel<UserModel> LoginCredentialCheck(string email, string password)
         {
@@ -64,7 +60,7 @@ namespace HospitalManagementSystem.Service.Interactions
                 if (dbUserMasterObj.Password != password)
                 {
                     returnResponseModel.status = false;
-                    returnResponseModel.message = "Wrong Password. ";
+                    returnResponseModel.message = "Wrong Password.";
                 }
                 else if (!dbUserMasterObj.isActive)
                 {
@@ -79,7 +75,6 @@ namespace HospitalManagementSystem.Service.Interactions
                         IsStaff = dbUserMasterObj?.IsStaff != null ? dbUserMasterObj.IsStaff : null,
                         Area = dbUserMasterObj.IsStaff != null ? "Staff" : "Patient",
                     };
-
                     returnResponseModel.status = true;
                 }
             }
@@ -88,7 +83,26 @@ namespace HospitalManagementSystem.Service.Interactions
                 returnResponseModel.status = false;
                 returnResponseModel.message = "Wrong Email";
             }
+            return returnResponseModel;
+        }
 
+        public ReturnResponseModel<UserModel> ForgotPasswordCheck(string emailphonenumber)
+        {
+            var returnResponseModel = new ReturnResponseModel<UserModel>();
+
+            var dbUserMasterObj = _dbcontext.UserMaster.FirstOrDefault(u => u.Email == emailphonenumber || u.PhoneNumber == emailphonenumber) ??
+                (dynamic)(_dbcontext.PatientMaster.FirstOrDefault(p => p.Email == emailphonenumber || p.PhoneNumber == emailphonenumber));
+
+            if (dbUserMasterObj != null)
+            {
+                returnResponseModel.status = true;
+                returnResponseModel.message = "The email or phone number exists. You can change your password now.";
+            }
+            else
+            {
+                returnResponseModel.status = false;
+                returnResponseModel.message = "No user found with the provided email or phone number.";
+            }
             return returnResponseModel;
         }
     }

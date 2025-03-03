@@ -20,5 +20,13 @@ namespace HospitalManagementSystem.Repository.Concrete
                 return accountService.LoginCredentialCheck(email,password);
             }
         }
+
+        public ReturnResponseModel<UserModel> ForgetPasswordDetails(string emailphonenumber)
+        {
+            using (AccountService accountService = new AccountService(_dBContext))
+            {
+                return accountService.ForgotPasswordCheck(emailphonenumber);
+            }
+        }
     }
 }
