@@ -1,7 +1,17 @@
-﻿
+﻿@using HospitalManagementSystem.Models.Models
+@using Newtonsoft.Json
+@inject IHttpContextAccessor accessor
 @{
-    ViewData["Title"] = "Dashboard";
+	ViewData["Title"] = "Dashboard";
+	var userDetails = JsonConvert.DeserializeObject<UserModel>(accessor.HttpContext.Session.GetString("User"));
+
 }
 
-<h1>Dashboard</h1>
+<h1>Patient Dashboard</h1>
+
+<h3>Patient Details</h3>
+<p>Full name: @userDetails.FirstName</p>
+<p>IsStaff: @userDetails.IsStaff</p>
+
+
 

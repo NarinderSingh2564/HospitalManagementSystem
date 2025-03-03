@@ -16,10 +16,8 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        //var kk = _logger.Login("amrit@gmail.com", "admin123");
         return RedirectToAction("Login", "Account");
     }
-
 
     public IActionResult Privacy()
     {

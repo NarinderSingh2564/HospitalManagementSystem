@@ -46,7 +46,7 @@ namespace HospitalManagementSystem.API.Controllers
                 loginUIObject.Email = loginUIModel.Email;
                 loginUIObject.Password = loginUIModel.Password;
 
-                var returnResponse = _accountRepository.Login(loginUIObject.Email, loginUIObject.Password);
+                var returnResponse = _accountRepository.CheckLoginDetails(loginUIObject.Email, loginUIObject.Password);
 
                 if (returnResponse.status)
                 {

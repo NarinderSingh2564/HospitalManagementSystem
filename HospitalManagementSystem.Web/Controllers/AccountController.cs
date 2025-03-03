@@ -28,6 +28,7 @@ namespace HospitalManagementSystem.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Login(LoginUIModel loginUIModel)
         {
             try
@@ -52,5 +53,24 @@ namespace HospitalManagementSystem.Web.Controllers
             }
             return View("Login", loginUIModel);
         }
+
+        [HttpPost]
+        public IActionResult ForgotPassword(ForgotPassword forgetPasswordUIModel)
+        {
+            try
+            {
+                ModelState.Clear();
+                var returnResponse = _logger.ForgetPasswordDetails(forgetPasswordUIModel.EmailPhoneNumber);
+
+                forgetPasswordUIModel.Status = returnResponse.status;
+                forgetPasswordUIModel.Message = returnResponse.message;
+                return PartialView("_ForgotPassword", forgetPasswordUIModel);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, message = "An error occurred: " + ex.Message });
+            }
+        }
+
     }
 }

@@ -1,5 +1,4 @@
-﻿using HospitalManagementSystem.Models.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalManagementSystem.Web.Areas.Staff.Controllers
 {
@@ -7,7 +6,6 @@ namespace HospitalManagementSystem.Web.Areas.Staff.Controllers
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
-
         public AccountController(ILogger<AccountController> logger)
         {
             _logger = logger;

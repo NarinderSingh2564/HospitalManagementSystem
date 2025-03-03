@@ -5,10 +5,11 @@
 	Layout = null;
 }
 
-
 <script src="~/theme/js/core/jquery-3.7.1.min.js"></script>
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
 
 <style>
 	.login-container {
@@ -83,15 +84,16 @@
 		<div class="panel panel-info">
 			<div class="panel-heading">
 				<div class="panel-title">Sign In</div>
-				<div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>
+				<div style="float:right; font-size: 80%; position: relative; top:-10px"><a type="button" data-toggle="modal" data-target="#mdlForgotPassword">Forgot password?</a></div>
 			</div>
 			<div style="padding-top:30px" class="panel-body">
 				@* @using (Html.BeginForm("Login", "Account", FormMethod.Post)) *@
 				@* { *@
-				<form method="post" class="row">
+				<form asp-controller="Account" asp-action="Login" method="post" class="row">
+
 					@if (Model.status == false && !string.IsNullOrEmpty(Model.Message))
 					{
-						<div class="alert alert-danger alert-dismissible mb-0" role="alert">
+						<div class="alert alert-danger alert-dismissible mb-0" style="margin-left: 5px; margin-right: 5px" role="alert">
 							@(Model.Message)
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
@@ -100,13 +102,14 @@
 					}
 
 					<div style="margin-bottom: 25px; margin-left: 5px; margin-right: 5px" class="input-group">
+						@* @Html.AntiForgeryToken() *@
 						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
 						@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", value = Model.Email ?? "amrit@gmail.com" } })
 					</div>
 
 					<div style="margin-bottom: 25px; margin-left: 5px; margin-right: 5px" class="input-group">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-						@Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", value = Model.Password ?? "admin123" } })
+						@Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", type="password", value = Model.Password ?? "admin123" } })
 					</div>
 
 					<div class="input-group" style="margin-left: 5px">
@@ -135,13 +138,11 @@
 							</div>
 						</div>
 					</div>
-					@* } *@
 				</form>
 			</div>
 		</div>
 	</div>
 </div>
-
 
 <div id="signupbox" style="display:none; margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 	<div class="panel panel-info">
@@ -150,7 +151,7 @@
 			<div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a></div>
 		</div>
 		<div class="panel-body">
-			<form id="signupform" class="form-horizontal" role="form">
+			<form asp-action="Register" id="signupform" class="form-horizontal" role="form">
 				<div id="signupalert" style="display:none" class="alert alert-danger">
 					<p>Error:</p>
 					<span></span>
@@ -204,8 +205,12 @@
 						</div>
 					</div>
 				</div>
-
 			</form>
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="mdlForgotPassword" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordLabel" aria-hidden="true">
+	@Html.Partial("_ForgotPassword", Model.forgotPassword);
+</div>
+
