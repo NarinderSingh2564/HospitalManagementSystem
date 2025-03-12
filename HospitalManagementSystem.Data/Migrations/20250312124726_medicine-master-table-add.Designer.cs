@@ -4,6 +4,7 @@ using HospitalManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250312124726_medicine-master-table-add")]
+    partial class medicinemastertableadd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -517,76 +520,6 @@ namespace HospitalManagementSystem.Data.Migrations
                     b.ToTable("PatientMedicalHistoryMaster");
                 });
 
-            modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.PatientMedicinePrescriptionDetailMaster", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("DosageQuantity")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("DosageUnit")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("Frequency")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int>("FrequencyUnit")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Instructions")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<int>("MedicineId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Timing")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("duration")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("DoctorId");
-
-                    b.HasIndex("MedicineId");
-
-                    b.HasIndex("PatientId");
-
-                    b.ToTable("PatientMedicinePrescriptionDetailMaster");
-                });
-
             modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.UserMaster", b =>
                 {
                     b.Property<int>("Id")
@@ -742,41 +675,6 @@ namespace HospitalManagementSystem.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("PatientMaster");
-                });
-
-            modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.PatientMedicinePrescriptionDetailMaster", b =>
-                {
-                    b.HasOne("HospitalManagementSystem.Data.DBClasses.DepartmentMaster", "DepartmentMaster")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HospitalManagementSystem.Data.DBClasses.UserMaster", "UserMaster")
-                        .WithMany()
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HospitalManagementSystem.Data.DBClasses.MedicineMaster", "MedicineMaster")
-                        .WithMany()
-                        .HasForeignKey("MedicineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HospitalManagementSystem.Data.DBClasses.PatientMaster", "PatientMaster")
-                        .WithMany()
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DepartmentMaster");
-
-                    b.Navigation("MedicineMaster");
-
-                    b.Navigation("PatientMaster");
-
-                    b.Navigation("UserMaster");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.UserMaster", b =>
