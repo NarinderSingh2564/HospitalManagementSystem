@@ -75,8 +75,6 @@ builder.Services.AddSwaggerGen(c =>
 //    });
 //});
 
-var key = builder.Configuration["Jwt:Key"];
-var issuer = builder.Configuration["Jwt:Issuer"];
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -99,12 +97,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<JwtService>();
 
-//builder.Services.AddDistributedMemoryCache();
-
-//builder.Services.AddSession(options => {
-//    options.IdleTimeout = TimeSpan.FromMinutes(10);
-//});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -119,8 +111,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseSession();
 
 app.MapControllers();
 

@@ -24,7 +24,7 @@ namespace HospitalManagementSystem.API.Controllers
         }
 
         [HttpPost("Login")]
-        
+
         public IActionResult Login(string username, string password)
         {
             var returnResponse = new ReturnResponseModel<UserModel>();
@@ -33,7 +33,7 @@ namespace HospitalManagementSystem.API.Controllers
             try
             {
                 returnResponse = _accountRepository.CheckLoginDetails(username, password);
-                returnResponse.Data.JwtToken = _jwtService.GenerateToken(returnResponse.Data.Id);
+               // returnResponse.Data.JwtToken = _jwtService.GenerateToken(returnResponse.Data.Id);
                 return Ok(returnResponse);
             }
             catch (Exception ex)
@@ -53,7 +53,7 @@ namespace HospitalManagementSystem.API.Controllers
             try
             {
                 returnResponse = _accountRepository.ForgetPasswordDetails(username);
-                
+
                 return Ok(returnResponse);
             }
             catch (Exception ex)
@@ -69,8 +69,20 @@ namespace HospitalManagementSystem.API.Controllers
         [Authorize]
         public IActionResult GetUser()
         {
-            var returnResponse = _accountRepository.CheckLoginDetails("abc@gmail.com", "admin123");
-            return Ok(returnResponse.Data);
+            var returnResponse = new ReturnResponseModel<UserModel>();
+
+            try
+            {
+                returnResponse = _accountRepository.CheckLoginDetails("abc@gmail.com", "admin123");
+                return Ok(returnResponse.Data);
+            }
+            catch (Exception ex)
+            {
+                returnResponse.status = false;
+                returnResponse.message = "An unknown error occured, please try again later.";
+
+                return StatusCode(500, returnResponse);
+            }
         }
 
     }

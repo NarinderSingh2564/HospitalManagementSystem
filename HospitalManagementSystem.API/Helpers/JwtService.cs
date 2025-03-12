@@ -19,22 +19,15 @@ namespace HospitalManagementSystem.API.Helpers
 
         public string GenerateToken(int id)
         {
-
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secureKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
-                //claims: new[]
-                //{
-                //new Claim(JwtRegisteredClaimNames.Sid, id.ToString()),
-                //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                //},
-                expires: DateTime.UtcNow,
+                expires: DateTime.UtcNow.AddMinutes(10),
                 signingCredentials: creds
             );
-
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
