@@ -14,6 +14,5 @@
         public bool isActive { get; set; }
         public string Password { get; set; }
         public string Area { get; set; }
-
     }
 }

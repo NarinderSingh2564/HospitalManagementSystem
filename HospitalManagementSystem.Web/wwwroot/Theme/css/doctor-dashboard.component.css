@@ -1,0 +1,90 @@
+.card {
+    /* box-shadow: 4px 1px 5px 0px var(--green); */
+    border-radius: 10px;
+    height: max-content;
+/*    background-color: var(--gray);*/
+}
+
+h6 {
+    color: var(--green);
+}
+
+.user-name {
+    color: var(--green);
+    font-weight: 600;
+    font-size: larger;
+}
+
+img.doctor-img {
+    width: 130px;
+    height: 130px;
+    float: inline-end;
+}
+
+.schedule span {
+    font-size: small;
+    font-weight: 500;
+}
+
+.border {
+    width: 65px;
+    height: 65px;
+}
+
+.border i {
+    font-size: xx-large;
+}
+
+.appointment-card .card-header {
+    font-weight: 700;
+    color: var(--green);
+    font-size: larger;
+}
+
+.text-wrap {
+    float: inline-end;
+    background-color: var(--green);
+    color: white;
+}
+
+img.patient-img {
+    width: 90px;
+    height: 90px;
+    float: inline-start;
+}
+
+.scrollable {
+    overflow-y: auto;
+    max-height: 285px;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollable button {
+    height: 30px;
+}
+
+.checked {
+    color: orange;
+}
+
+.scrollable small {
+    font-size: 12px;
+}
+
+.count-cards a {
+    text-decoration: none;
+    font-size: smaller;
+}
+
+.count-cards a:hover {
+    text-decoration: underline;
+    font-size: smaller;
+}
+
+.completed{
+    color: orangered;
+    border: orangered;
+}

@@ -1,4 +1,8 @@
-﻿using HospitalManagementSystem.Models.UIModels;
+﻿using AutoMapper;
+using HospitalManagementSystem.Models.Common;
+using HospitalManagementSystem.Models.InputModels;
+using HospitalManagementSystem.Models.Models;
+using HospitalManagementSystem.Models.UIModels;
 using HospitalManagementSystem.Repository.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -7,13 +11,15 @@ namespace HospitalManagementSystem.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAccountRepository _logger;
+        private readonly IAccountRepository _accountRepository;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public AccountController(IAccountRepository logger, IConfiguration configuration)
+        public AccountController(IAccountRepository accountRepository, IConfiguration configuration, IMapper mapper)
         {
-            _logger = logger;
+            _accountRepository = accountRepository;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -22,8 +28,13 @@ namespace HospitalManagementSystem.Web.Controllers
             var loginUIModel = new LoginUIModel
             {
                 Email = "rohan@gmail.com",
-                Password = "abc123"
+                Password = "abc123",
+                registerUser = new RegisterUserUIModel()
             };
+
+            loginUIModel.registerUser.DesignationList = _accountRepository.GetDesignationList().Select(x => new KeyValueModel<int, string>() { key = x.Id, value = x.Designation }).ToList();
+            loginUIModel.registerUser.DepartmentList = _accountRepository.GetDepartmentList().Select(x => new KeyValueModel<int, string>() { key = x.Id, value = x.Department }).ToList();
+
             return View(loginUIModel);
         }
 
@@ -33,7 +44,7 @@ namespace HospitalManagementSystem.Web.Controllers
         {
             try
             {
-                var returnResponse = _logger.CheckLoginDetails(loginUIModel.Email, loginUIModel.Password);
+                var returnResponse = _accountRepository.LoginCredentialCheck(loginUIModel.Email, loginUIModel.Password);
 
                 if (returnResponse.status)
                 {
@@ -55,20 +66,87 @@ namespace HospitalManagementSystem.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult ForgotPassword(ForgotPassword forgetPasswordUIModel)
+        public IActionResult ForgotPasswordCheck(ForgotPasswordUIModel forgetPasswordUIModel)
         {
+            var returnResponseModel = new ForgotPasswordUIModel();
+
             try
             {
                 ModelState.Clear();
-                var returnResponse = _logger.ForgetPasswordDetails(forgetPasswordUIModel.EmailPhoneNumber);
 
-                forgetPasswordUIModel.Status = returnResponse.status;
-                forgetPasswordUIModel.Message = returnResponse.message;
-                return PartialView("_ForgotPassword", forgetPasswordUIModel);
+                if (ModelState.IsValid)
+                {
+                    var returnResponse = _accountRepository.ForgotPasswordCheck(forgetPasswordUIModel.EmailPhoneNumber);
+                    returnResponseModel.Status = returnResponse.status;
+                    returnResponseModel.Message = returnResponse.message;
+                }
+                else
+                {
+                    returnResponseModel.Status = false;
+                    returnResponseModel.Message = "Invalid input.";
+                }
             }
             catch (Exception ex)
             {
-                return Json(new { status = false, message = "An error occurred: " + ex.Message });
+                returnResponseModel.Status = false;
+                returnResponseModel.Message = ex.Message;
+            }
+            return PartialView("_ForgotPassword", returnResponseModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult RegisterUser(RegisterUserUIModel registerUser)
+        {
+            try
+            {
+                var loginUIModel = new LoginUIModel
+                {
+                    registerUser = registerUser
+                };
+
+                if (!ModelState.IsValid)
+                {
+                    loginUIModel.status = false;
+                    loginUIModel.Message = "Invalid registration attempt.";
+                    loginUIModel.registerUser.DesignationList = _accountRepository.GetDesignationList()
+                        .Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Designation })
+                        .ToList();
+                    loginUIModel.registerUser.DepartmentList = _accountRepository.GetDepartmentList()
+                        .Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department })
+                        .ToList();
+
+                    return View("Login", loginUIModel);
+                }
+
+                var mapRegisterUserInputModel = _mapper.Map<RegisterUserInputModel>(registerUser);
+                var returnResponse = _accountRepository.RegisterUser(mapRegisterUserInputModel);
+
+                loginUIModel.status = returnResponse.status;
+                loginUIModel.Message = returnResponse.message;
+
+                if (!returnResponse.status)
+                {
+                    loginUIModel.registerUser.DesignationList = _accountRepository.GetDesignationList()
+                        .Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Designation })
+                        .ToList();
+                    loginUIModel.registerUser.DepartmentList = _accountRepository.GetDepartmentList()
+                        .Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department })
+                        .ToList();
+
+                    ModelState.Clear();
+                }
+
+                return View("Login", loginUIModel);
+            }
+            catch (Exception ex)
+            {
+                var loginUIModel = new LoginUIModel
+                {
+                    status = false,
+                    Message = ex.Message
+                };
+                return View("Login", loginUIModel);
             }
         }
 

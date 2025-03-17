@@ -6,290 +6,247 @@
 	var userDetails = JsonConvert.DeserializeObject<UserModel>(accessor.HttpContext.Session.GetString("User"));
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link href="~/theme/css/fonts.min.css" rel="stylesheet" />
-<link href="~/theme/css/fonts.css" rel="stylesheet" />
+@* <link href="~/theme/css/fonts.min.css" rel="stylesheet" />  *@
+@* <link href="~/theme/css/fonts.css" rel="stylesheet" />  *@
+<link href="~/theme/css/doctor-dashboard.component.css" rel="stylesheet" />
+
+<style>
+	.checked {
+		color: orange;
+	}
+</style>
 <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
-	<div>
-		<h3 class="fw-bold mb-3">Dashboard</h3>
-		<h6 class="op-7 mb-2">Free Bootstrap 5 Admin Dashboard</h6>
+	<div class="col">
+
+		<h3 class="fw-bold mb-3"><i class="fa fa-home"></i> Dashboard</h3>
 	</div>
 	<div class="ms-md-auto py-2 py-md-0">
-		<a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
-		<a href="#" class="btn btn-primary btn-round">Add Customer</a>
+		<a href="#" class="btn btn-label-info btn-round me-2">Manage Appointments</a>
+		<a href="#" class="btn btn-primary btn-round">Add Patient</a>
 	</div>
 </div>
-<div class="row">
-	<div class="col-sm-6 col-md-3">
-		<div class="card card-stats card-round">
+
+<div class="row mt-1">
+	<div class="col-md-12">
+		<div class="card">
 			<div class="card-body">
-				<div class="row align-items-center">
-					<div class="col-icon">
-						<div class="icon-big text-center icon-primary bubble-shadow-small">
-							<i class="fas fa-users"></i>
-						</div>
-					</div>
-					<div class="col col-stats ms-3 ms-sm-0">
-						<div class="numbers">
-							<p class="card-category">Total Patients</p>
-							<h4 class="card-title">19,294</h4>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-6 col-md-3">
-		<div class="card card-stats card-round">
-			<div class="card-body">
-				<div class="row align-items-center">
-					<div class="col-icon">
-						<div class="icon-big text-center icon-info bubble-shadow-small">
-							<i class="fas fa-user-cog"></i>
-						</div>
-					</div>
-					<div class="col col-stats ms-3 ms-sm-0">
-						<div class="numbers">
-							<p class="card-category">Treatment in Progress</p>
-							<h4 class="card-title">1,303</h4>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-6 col-md-3">
-		<div class="card card-stats card-round">
-			<div class="card-body">
-				<div class="row align-items-center">
-					<div class="col-icon">
-						<div class="icon-big text-center icon-success bubble-shadow-small">
-							<i class="fas fa-luggage-cart"></i>
-						</div>
-					</div>
-					<div class="col col-stats ms-3 ms-sm-0">
-						<div class="numbers">
-							<p class="card-category">Total Revenue</p>
-							<h4 class="card-title">$ 105,345</h4>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-6 col-md-3">
-		<div class="card card-stats card-round">
-			<div class="card-body">
-				<div class="row align-items-center">
-					<div class="col-icon">
-						<div class="icon-big text-center icon-secondary bubble-shadow-small">
-							<i class="far fa-check-circle"></i>
-						</div>
-					</div>
-					<div class="col col-stats ms-3 ms-sm-0">
-						<div class="numbers">
-							<p class="card-category">Completed Treatments</p>
-							<h4 class="card-title">17,991</h4>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-8">
-		<div class="card card-round">
-			<div class="card-header">
-				<div class="card-head-row">
-					<div class="card-title">Patient Statistics</div>
-					<div class="card-tools">
-						<a href="#"
-						   class="btn btn-label-success btn-round btn-sm me-2">
-							<span class="btn-label">
-								<i class="fa fa-pencil"></i>
-							</span>
-							Export
-						</a>
-						<a href="#" class="btn btn-label-info btn-round btn-sm">
-							<span class="btn-label">
-								<i class="fa fa-print"></i>
-							</span>
-							Print
-						</a>
-					</div>
-				</div>
-			</div>
-			<div class="card-body">
-				<div class="chart-container" style="min-height: 375px">
-					<canvas id="statisticsChart"></canvas>
-				</div>
-				<div id="myChartLegend"></div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-4">
-		<div class="card card-primary card-round">
-			<div class="card-header">
-				<div class="card-head-row">
-					<div class="card-title">Daily Revenue Generated	</div>
-					<div class="card-tools">
-						<div class="dropdown">
-							<button class="btn btn-sm btn-label-light dropdown-toggle"
-									type="button"
-									id="dropdownMenuButton"
-									data-bs-toggle="dropdown"
-									aria-haspopup="true"
-									aria-expanded="false">
-								Export
+				<img src="~/theme/img/profile.jpg" alt="" class="doctor-img">
+				<span class="user-name" />
+				Hello,<br />
+				Dr. @(userDetails.FirstName)
+				@* </span><small>({{designation}})</small>*@
+				<br>
+				<small class="text-muted">Your today's schedule...</small><br>
+				<div class="col-12 mt-2 schedule">
+					<div class="row">
+
+						<div class="col-12 col-sm-6 col-md-3 col-lg-3 p-2 d-flex justify-content-start align-items-center">
+							<button type="button" class="btn btn-warning d-flex align-items-center">
+								<i class="fa fa-bed-pulse"></i>
 							</button>
-							<div class="dropdown-menu"
-								 aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="#">Action</a>
-								<a class="dropdown-item" href="#">Another action</a>
-								<a class="dropdown-item" href="#">Something else here</a>
+							<span class="ms-2">10 Patients</span>
+						</div>
+
+						<div class="col-12 col-sm-6 col-md-3 col-lg-3 p-2 d-flex justify-content-start align-items-center">
+							<button type="button" class="btn btn-info d-flex align-items-center">
+								<i class="fa fa-clipboard-check"></i>
+							</button>
+							<span class="ms-2">5 Appointments</span>
+						</div>
+
+						<div class="col-12 col-sm-6 col-md-3 col-lg-3 p-2 d-flex justify-content-start align-items-center">
+							<button type="button" class="btn btn-danger d-flex align-items-center">
+								<i class="fa-solid fa-heart-pulse"></i>
+							</button>
+							<span class="ms-2">3 Surgeries</span>
+						</div>
+
+						<div class="col-12 col-sm-6 col-md-3 col-lg-3 p-2 d-flex justify-content-start align-items-center">
+							<button type="button" class="btn btn-success d-flex align-items-center">
+								<i class="fas fa-walking"></i>
+							</button>
+							<span class="ms-2">2 Discharges</span>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<h3 class="text-black-500">Patient's Statistics...</h3>
+
+	<div class="col-sm-6 col-md-4  col-md-3">
+		<div class="card card-stats card-round">
+			<button type="button" class="btn btn-transparent m-0 p-0">
+				<div class="card-body" style="position: relative;">
+					<div class="row align-items-center">
+						<div class="col-icon">
+							<div class="icon-big text-center icon-primary bubble-shadow-small">
+								<i class="fas fa-users"></i>
+							</div>
+						</div>
+						<div class="col col-stats ms-3 ms-sm-0">
+							<div class="numbers">
+								<p class="card-category">Total Patients</p>
+								<p class="card-title">19,294</p>
+							</div>
+						</div>
+						<p class="text-primary" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+20%</p>
+					</div>
+				</div>
+			</button>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-4  col-md-3">
+		<div class="card card-stats card-round">
+			<button type="button" class="btn btn-transparent m-0 p-0">
+				<div class="card-body" style="position: relative;">
+					<div class="row align-items-center">
+						<div class="col-icon">
+							<div class="icon-big text-center icon-info bubble-shadow-small">
+								<i class="fas fa-user-cog"></i>
+							</div>
+						</div>
+						<div class="col col-stats ms-3 ms-sm-0">
+							<div class="numbers">
+								<p class="card-category">Consulted</p>
+								<h4 class="card-title">1,303</h4>
+							</div>
+						</div>
+						<p class="text-info" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+20%</p>
+					</div>
+				</div>
+			</button>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-4  col-md-3">
+		<div class="card card-stats card-round">
+			<button type="button" class="btn btn-transparent m-0 p-0">
+				<div class="card-body" style="position: relative;">
+					<div class="row align-items-center">
+						<div class="col-icon">
+							<div class="icon-big text-center icon-danger bubble-shadow-small">
+								<i class="fa fa-bed-pulse"></i>
+							</div>
+						</div>
+						<div class="col col-stats ms-3 ms-sm-0">
+							<div class="numbers">
+								<p class="card-category">Admitted</p>
+								<h4 class="card-title">5,345</h4>
+							</div>
+						</div>
+						<p class="text-danger" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+30%</p>
+					</div>
+				</div>
+			</button>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-4  col-md-3">
+		<div class="card card-stats card-round">
+			<button type="button" class="btn btn-transparent m-0 p-0">
+				<div class="card-body" style="position: relative;">
+					<div class="row align-items-center">
+						<div class="col-icon">
+							<div class="icon-big text-center icon-success bubble-shadow-small">
+								<i class="fa-solid fa-stethoscope"></i>
+							</div>
+						</div>
+						<div class="col col-stats ms-3 ms-sm-0">
+							<div class="numbers">
+								<p class="card-category">Operated</p>
+								<h4 class="card-title">5,091</h4>
+							</div>
+						</div>
+						<p class="text-success" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+30%</p>
+					</div>
+				</div>
+			</button>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-4  col-md-3">
+		<div class="card card-stats card-round">
+			<button type="button" class="btn btn-transparent m-0 p-0">
+				<div class="card-body" style="position: relative;">
+					<div class="row align-items-center">
+						<div class="col-icon">
+							<div class="icon-big text-center icon-secondary bubble-shadow-small">
+								<i class="fas fa-walking"></i>
+							</div>
+						</div>
+						<div class="col col-stats ms-3 ms-sm-0">
+							<div class="numbers">
+								<p class="card-category">Discharged</p>
+								<h4 class="card-title">4,573</h4>
+							</div>
+						</div>
+						<p class="text-secondary" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+35%</p>
+					</div>
+				</div>
+			</button>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-4  col-md-3">
+		<div class="card card-stats card-round">
+			<button type="button" class="btn btn-transparent m-0 p-0">
+				<div class="card-body" style="position: relative;">
+					<div class="row align-items-center">
+						<div class="col-icon">
+							<div class="icon-big text-center icon-warning bubble-shadow-small">
+								<i class="fa-solid fa-capsules"></i>
+							</div>
+						</div>
+						<div class="col col-stats ms-3 ms-sm-0">
+							<div class="numbers">
+								<p class="card-category">Medicated</p>
+								<h4 class="card-title">2,291</h4>
+							</div>
+						</div>
+						<p class="text-warning" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+40%</p>
+					</div>
+				</div>
+			</button>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-4  col-md-3">
+		<div class="card card-stats card-round">
+			<button type="button" class="btn btn-transparent m-0 p-0">
+				<div class="card-body" style="position: relative;">
+					<div class="row align-items-center">
+						<div class="col-icon">
+							<div class="icon-big text-center icon-info bubble-shadow-small">
+								<i class="far fa-check-circle"></i>
+							</div>
+						</div>
+						<div class="col col-stats ms-3 ms-sm-0">
+							<div class="numbers">
+								<p class="card-category">Out Patients</p>
+								<h4 class="card-title">691</h4>
 							</div>
 						</div>
 					</div>
+					<p class="text-primary" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+40%</p>
 				</div>
-				<div class="card-category">March 25 - April 02</div>
-			</div>
-			<div class="card-body pb-0">
-				<div class="mb-4 mt-2">
-					<h1>$4,578.58</h1>
-				</div>
-				<div class="pull-in">
-					<canvas id="dailySalesChart"></canvas>
-				</div>
-			</div>
-		</div>
-		<div class="card card-round">
-			<div class="card-body pb-0">
-				<div class="h1 fw-bold float-end text-primary">+5%</div>
-				<h2 class="mb-2">17</h2>
-				<p class="text-muted">Users online</p>
-				<div class="pull-in sparkline-fix">
-					<div id="lineChart"></div>
-				</div>
-			</div>
+			</button>
 		</div>
 	</div>
+
 </div>
-<div class="row">
-	<div class="col-md-12">
-		<div class="card card-round">
-			<div class="card-header">
-				<div class="card-head-row card-tools-still-right">
-					<h4 class="card-title">Patient's Geolocation</h4>
-					<div class="card-tools">
-						<button class="btn btn-icon btn-link btn-primary btn-xs">
-							<span class="fa fa-angle-down"></span>
-						</button>
-						<button class="btn btn-icon btn-link btn-primary btn-xs btn-refresh-card">
-							<span class="fa fa-sync-alt"></span>
-						</button>
-						<button class="btn btn-icon btn-link btn-primary btn-xs">
-							<span class="fa fa-times"></span>
-						</button>
-					</div>
-				</div>
-				<p class="card-category">
-					Map of the distribution of patients around the world
-				</p>
-			</div>
-			<div class="card-body">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="table-responsive table-hover table-sales">
-							<table class="table">
-								<tbody>
-									<tr>
-										<td>
-											<div class="flag">
-												<img src="~/theme/img/flags/id.png"
-													 alt="indonesia" />
-											</div>
-										</td>
-										<td>Indonesia</td>
-										<td class="text-end">2.320</td>
-										<td class="text-end">42.18%</td>
-									</tr>
-									<tr>
-										<td>
-											<div class="flag">
-												<img src="~/theme/img/flags/us.png"
-													 alt="united states" />
-											</div>
-										</td>
-										<td>USA</td>
-										<td class="text-end">240</td>
-										<td class="text-end">4.36%</td>
-									</tr>
-									<tr>
-										<td>
-											<div class="flag">
-												<img src="~/theme/img/flags/au.png"
-													 alt="australia" />
-											</div>
-										</td>
-										<td>Australia</td>
-										<td class="text-end">119</td>
-										<td class="text-end">2.16%</td>
-									</tr>
-									<tr>
-										<td>
-											<div class="flag">
-												<img src="~/theme/img/flags/ru.png"
-													 alt="russia" />
-											</div>
-										</td>
-										<td>Russia</td>
-										<td class="text-end">1.081</td>
-										<td class="text-end">19.65%</td>
-									</tr>
-									<tr>
-										<td>
-											<div class="flag">
-												<img src="~/theme/img/flags/cn.png"
-													 alt="china" />
-											</div>
-										</td>
-										<td>China</td>
-										<td class="text-end">1.100</td>
-										<td class="text-end">20%</td>
-									</tr>
-									<tr>
-										<td>
-											<div class="flag">
-												<img src="~/theme/img/flags/br.png"
-													 alt="brazil" />
-											</div>
-										</td>
-										<td>Brasil</td>
-										<td class="text-end">640</td>
-										<td class="text-end">11.63%</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="mapcontainer">
-							<div id="world-map"
-								 class="w-100"
-								 style="height: 300px"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+
 <div class="row">
 	<div class="col-md-4">
 		<div class="card card-round">
 			<div class="card-body">
 				<div class="card-head-row card-tools-still-right">
-					<div class="card-title">New Patients</div>
+					<div class="card-title">Upcoming Patients</div>
 					<div class="card-tools">
 						<div class="dropdown">
 							<button class="btn btn-icon btn-clean me-0"
@@ -329,7 +286,9 @@
 					</div>
 					<div class="item-list">
 						<div class="avatar">
-							<span class="avatar-title rounded-circle border border-white">CF</span>
+							<img src="~/theme/img/jm_denis.jpg"
+								 alt="..."
+								 class="avatar-img rounded-circle" />
 						</div>
 						<div class="info-user ms-3">
 							<div class="username">Chandra Felix</div>
@@ -378,7 +337,9 @@
 					</div>
 					<div class="item-list">
 						<div class="avatar">
-							<span class="avatar-title rounded-circle border border-white bg-primary">H</span>
+							<img src="~/theme/img/jm_denis.jpg"
+								 alt="..."
+								 class="avatar-img rounded-circle" />
 						</div>
 						<div class="info-user ms-3">
 							<div class="username">Hizrian</div>
@@ -393,7 +354,9 @@
 					</div>
 					<div class="item-list">
 						<div class="avatar">
-							<span class="avatar-title rounded-circle border border-white bg-secondary">F</span>
+							<img src="~/theme/img/chadengle.jpg"
+								 alt="..."
+								 class="avatar-img rounded-circle" />
 						</div>
 						<div class="info-user ms-3">
 							<div class="username">Farrah</div>
@@ -410,6 +373,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="col-md-8">
 		<div class="card card-round">
 			<div class="card-header">
@@ -541,6 +505,155 @@
 							</tr>
 						</tbody>
 					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="card card-round">
+			<div class="card-header">
+				<div class="card-head-row card-tools-still-right">
+					<h4 class="card-title">Patient's Reviews</h4>
+					<div class="card-tools">
+						<button class="btn btn-icon btn-link btn-primary btn-xs">
+							<span class="fa fa-angle-down"></span>
+						</button>
+						<button class="btn btn-icon btn-link btn-primary btn-xs btn-refresh-card">
+							<span class="fa fa-sync-alt"></span>
+						</button>
+						<button class="btn btn-icon btn-link btn-primary btn-xs">
+							<span class="fa fa-times"></span>
+						</button>
+					</div>
+				</div>
+				<p class="card-category">
+					Satisfaction survey
+				</p>
+			</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md">
+						<div class="table-responsive table-hover table-sales">
+							<table class="table">
+								<tbody>
+									<tr>
+										<td>
+											<div class="flag">
+												<img src="~/theme/img/talha.jpg"
+													 alt="..."
+													 class="avatar-img rounded-circle" style="height:60px; width:60px" />
+											</div>
+										</td>
+										<td>John Doe</td>
+										<td class="text-center">One of the finest doctor, I've met.One of the finest doctor, I've met.</td>
+										<td>
+											<span class="fa fa-star checked"></span>
+											<span class="fa fa-star checked"></span>
+											<span class="fa fa-star checked"></span>
+											<span class="fa fa-star checked"></span>
+											<span class="fa fa-star"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="flag">
+												<img src="~/theme/img/talha.jpg"
+													 alt="..."
+													 class="avatar-img rounded-circle" style="height:60px; width:60px" />
+											</div>
+										</td>
+										<td>Jimmy Denis</td>
+										<td class="text-center">One of the finest doctor, I've met.One of the finest doctor, I've met.</td>
+										<td>
+											<span class="fa fa-star checked"></span>
+											<span class="fa fa-star"></span>
+											<span class="fa fa-star "></span>
+											<span class="fa fa-star"></span>
+											<span class="fa fa-star"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="flag">
+												<img src="~/theme/img/talha.jpg"
+													 alt="..."
+													 class="avatar-img rounded-circle" style="height:60px; width:60px" />
+											</div>
+										</td>
+										<td>Jason</td>
+										<td class="text-center">One of the finest doctor, I've met.One of the finest doctor, I've met.</td>
+										<td>
+											<span class="fa fa-star checked"></span>
+											<span class="fa fa-star"></span>
+											<span class="fa fa-star"></span>
+											<span class="fa fa-star"></span>
+											<span class="fa fa-star"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="flag">
+												<img src="~/theme/img/talha.jpg"
+													 alt="..."
+													 class="avatar-img rounded-circle" style="height:60px; width:60px" />
+											</div>
+										</td>
+										<td>Micheal</td>
+										<td class="text-center">One of the finest doctor, I've met.One of the finest doctor, I've met.</td>
+										<td>
+											<span class="fa fa-star checked"></span>
+											<span class="fa fa-star checked"></span>
+											<span class="fa fa-star"></span>
+											<span class="fa fa-star"></span>
+											<span class="fa fa-star"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="flag">
+												<img src="~/theme/img/talha.jpg"
+													 alt="..."
+													 class="avatar-img rounded-circle" style="height:60px; width:60px" />
+											</div>
+										</td>
+										<td>Jonathon</td>
+										<td class="text-center">One of the finest doctor, I've met.One of the finest doctor, I've met.</td>
+										<td>
+											<span class="fa fa-star checked"></span>
+											<span class="fa fa-star checked"></span>
+											<span class="fa fa-star"></span>
+											<span class="fa fa-star"></span>
+											<span class="fa fa-star"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="flag">
+												<img src="~/theme/img/talha.jpg"
+													 alt="..."
+													 class="avatar-img rounded-circle" style="height:60px; width:60px" />
+											</div>
+										</td>
+										<td>Chris</td>
+										<td class="text-center">One of the finest doctor, I've met.One of the finest doctor, I've met.</td>
+										<td>
+											<span class="fa fa-star checked"></span>
+											<span class="fa fa-star checked"></span>
+											<span class="fa fa-star checked"></span>
+											<span class="fa fa-star"></span>
+											<span class="fa fa-star"></span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>

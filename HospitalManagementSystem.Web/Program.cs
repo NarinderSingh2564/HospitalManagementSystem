@@ -1,6 +1,8 @@
+using AutoMapper;
 using HospitalManagementSystem.Data;
 using HospitalManagementSystem.Repository.Abstract;
 using HospitalManagementSystem.Repository.Concrete;
+using HospitalManagementSystem.Web.Helper;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(x => x.UseSqlServer(builder.
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
+builder.Services.AddAutoMapper(typeof(ObjectAutoMapper));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddSession(options =>
 {

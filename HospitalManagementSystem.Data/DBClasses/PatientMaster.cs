@@ -78,14 +78,14 @@ namespace HospitalManagementSystem.Data.DBClasses
         [StringLength(30)]
         [Column(TypeName = "Varchar(30)")]
         public string InsuranceNumber { get; set; }
-
-        [StringLength(4)]
-        [Column(TypeName = "varchar(4)")]
-        public string IsStaff { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public int? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
+
+        [StringLength(4)]
+        [Column(TypeName = "varchar(4)")]
         public bool isActive { get; set; }
+        public string IsStaff { get; set; }
     }
 }

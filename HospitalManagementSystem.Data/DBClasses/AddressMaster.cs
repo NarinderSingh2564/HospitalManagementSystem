@@ -7,14 +7,6 @@ namespace HospitalManagementSystem.Data.DBClasses
     {
         public int Id { get; set; }
 
-        [ForeignKey("UserMaster")]
-        public int? UserId { get; set; }
-        public UserMaster UserMaster { get; set; }
-
-        [ForeignKey("PatientMaster")]
-        public int? PatientId { get; set; }
-        public PatientMaster PatientMaster { get; set; }
-
         [Required]
         [StringLength(6)]
         [Column(TypeName = "varchar(6)")]
@@ -40,8 +32,16 @@ namespace HospitalManagementSystem.Data.DBClasses
         [Column(TypeName = "varchar(50)")]
         public string Address { get; set; }
 
+        [ForeignKey("UserMaster")]
+        public int? UserId { get; set; }
+        public UserMaster UserMaster { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
+
+        [ForeignKey("PatientMaster")]
+        public int? PatientId { get; set; }
+        public PatientMaster PatientMaster { get; set; }
+
         public int? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public bool isActive { get; set; }
