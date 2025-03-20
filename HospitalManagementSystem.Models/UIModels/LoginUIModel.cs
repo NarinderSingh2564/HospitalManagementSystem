@@ -30,8 +30,16 @@ namespace HospitalManagementSystem.Models.UIModels
         [Required]
         [Display(Name = "Value is required")]
         public string EmailPhoneNumber { get; set; }
-        public string OldPassword { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "New Password is required")]
         public string NewPassword { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm Password is required")]
+        [Compare("NewPassword", ErrorMessage = "Password and Confirm Password do not match.")]
         public string ConfirmPassword { get; set; }
         public string Message { get; set; }
         public bool Status { get; set; }

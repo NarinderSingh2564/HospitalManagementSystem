@@ -96,7 +96,7 @@ namespace HospitalManagementSystem.Service.Interactions
             return returnResponseModel;
         }
 
-        public ReturnResponseModel<UserModel> ForgotPasswordCheck(string emailphonenumber)
+        public ReturnResponseModel<UserModel> CheckUserByEmailOrPhoneNumber(string emailphonenumber)
         {
             var returnResponseModel = new ReturnResponseModel<UserModel>();
 
@@ -109,7 +109,7 @@ namespace HospitalManagementSystem.Service.Interactions
 
             var dbUserEmailObj = _dbcontext.UserMaster.FirstOrDefault(u => u.Email == emailphonenumber);
             var dbUserPhoneNumberObj = _dbcontext.UserMaster.FirstOrDefault(u => u.PhoneNumber == emailphonenumber);
-            
+
             if (dbUserEmailObj != null)
             {
                 returnResponseModel.status = true;
@@ -124,6 +124,61 @@ namespace HospitalManagementSystem.Service.Interactions
             {
                 returnResponseModel.status = false;
                 returnResponseModel.message = "No user found with the provided data.";
+            }
+            return returnResponseModel;
+        }
+
+        public ReturnResponseModel<UserModel> UpdatePassword(string emailphonenumber, string newPassword, string confirmPassword)
+        {
+            var returnResponseModel = new ReturnResponseModel<UserModel>();
+
+            if (string.IsNullOrEmpty(emailphonenumber))
+            {
+                returnResponseModel.status = false;
+                returnResponseModel.message = "Email/Phone number is required.";
+                return returnResponseModel;
+            }
+            else if (string.IsNullOrEmpty(newPassword))
+            {
+                returnResponseModel.status = false;
+                returnResponseModel.message = "New password is required.";
+                return returnResponseModel;
+            }
+            else if (string.IsNullOrEmpty(confirmPassword))
+            {
+                returnResponseModel.status = false;
+                returnResponseModel.message = "Confirm password is required.";
+                return returnResponseModel;
+            }
+
+            if (newPassword != confirmPassword)
+            {
+                returnResponseModel.status = false;
+                returnResponseModel.message = "New password and confirm password do not match.";
+                return returnResponseModel;
+            }
+
+            var dbUserObj = _dbcontext.UserMaster.FirstOrDefault(u => u.Email == emailphonenumber || u.PhoneNumber == emailphonenumber);
+
+            if (dbUserObj == null)
+            {
+                returnResponseModel.status = false;
+                returnResponseModel.message = "No user found with the provided data.";
+                return returnResponseModel;
+            }
+            else if (dbUserObj.Password == newPassword)
+            {
+                returnResponseModel.status = false;
+                returnResponseModel.message = "New password cannot be the same as the old password.";
+                return returnResponseModel;
+            }
+            else
+            {
+                dbUserObj.Password = newPassword;
+                _dbcontext.SaveChanges();
+
+                returnResponseModel.status = true;
+                returnResponseModel.message = "Password updated successfully. Please Login";
             }
             return returnResponseModel;
         }

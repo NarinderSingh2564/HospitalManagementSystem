@@ -8,10 +8,11 @@ namespace HospitalManagementSystem.Repository.Abstract
     public interface IAccountRepository
     {
         ReturnResponseModel<UserModel> LoginCredentialCheck(string email, string password);
-        ReturnResponseModel<UserModel> ForgotPasswordCheck(string emailphonenumber);
+        ReturnResponseModel<UserModel> CheckUserByEmailOrPhoneNumber(string emailphonenumber);
         ReturnResponseModel<RegisterUserUIModel> RegisterUser(RegisterUserInputModel registerUser);
         List<DesignationModel> GetDesignationList();
         List<DepartmentModel> GetDepartmentList();
+        ReturnResponseModel<UserModel> UpdatePassword(string emailphonenumber, string newPassword, string confirmPassword);
 
     }
 }

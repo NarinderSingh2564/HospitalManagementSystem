@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using AutoMapper;
 using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.InputModels;
 using HospitalManagementSystem.Models.Models;
@@ -66,19 +67,28 @@ namespace HospitalManagementSystem.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult ForgotPasswordCheck(ForgotPasswordUIModel forgetPasswordUIModel)
+        public IActionResult CheckUserByEmailOrPhoneNumber(ForgotPasswordUIModel forgetPasswordUIModel)
         {
             var returnResponseModel = new ForgotPasswordUIModel();
-
             try
             {
                 ModelState.Clear();
 
                 if (ModelState.IsValid)
                 {
-                    var returnResponse = _accountRepository.ForgotPasswordCheck(forgetPasswordUIModel.EmailPhoneNumber);
+                    var returnResponse = _accountRepository.CheckUserByEmailOrPhoneNumber(forgetPasswordUIModel.EmailPhoneNumber);
                     returnResponseModel.Status = returnResponse.status;
                     returnResponseModel.Message = returnResponse.message;
+
+                    if (returnResponse.status)
+                    {
+                        if (!string.IsNullOrEmpty(forgetPasswordUIModel.NewPassword) && !string.IsNullOrEmpty(forgetPasswordUIModel.ConfirmPassword))
+                        {
+                            var updatePasswordResponse = _accountRepository.UpdatePassword(forgetPasswordUIModel.EmailPhoneNumber, forgetPasswordUIModel.NewPassword, forgetPasswordUIModel.ConfirmPassword);
+                            returnResponseModel.Status = updatePasswordResponse.status;
+                            returnResponseModel.Message = updatePasswordResponse.message;
+                        }
+                    }
                 }
                 else
                 {
@@ -93,6 +103,7 @@ namespace HospitalManagementSystem.Web.Controllers
             }
             return PartialView("_ForgotPassword", returnResponseModel);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

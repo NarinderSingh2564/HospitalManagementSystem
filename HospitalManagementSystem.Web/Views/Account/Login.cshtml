@@ -4,13 +4,12 @@
 	Layout = null;
 }
 
-
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
 
 <style>
 	.login-container {
@@ -92,16 +91,16 @@
 					@if (Model.status == false && !string.IsNullOrEmpty(Model.Message))
 					{
 						<div class="alert alert-danger alert-dismissible mb-0" style="margin-left: 5px; margin-right: 5px" role="alert">
-							@(Model.Message)
+							@Model.Message
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
 					}
-					else if (!Model.status == false && !string.IsNullOrEmpty(Model.Message))
+					else if (Model.status == true && !string.IsNullOrEmpty(Model.Message))
 					{
 						<div class="alert alert-info alert-dismissible mb-0" style="margin-left: 5px; margin-right: 5px" role="alert">
-							@(Model.Message)
+							@Model.Message
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>

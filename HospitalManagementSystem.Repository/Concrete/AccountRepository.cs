@@ -8,7 +8,7 @@ using HospitalManagementSystem.Service.Interactions;
 
 namespace HospitalManagementSystem.Repository.Concrete
 {
-    public class AccountRepository:IAccountRepository
+    public class AccountRepository : IAccountRepository
     {
         ApplicationDBContext _dBContext;
         public AccountRepository(ApplicationDBContext applicationDBContext)
@@ -19,15 +19,15 @@ namespace HospitalManagementSystem.Repository.Concrete
         {
             using (AccountService accountService = new AccountService(_dBContext))
             {
-                return accountService.LoginCredentialCheck(email,password);
+                return accountService.LoginCredentialCheck(email, password);
             }
         }
 
-        public ReturnResponseModel<UserModel> ForgotPasswordCheck(string emailphonenumber)
+        public ReturnResponseModel<UserModel> CheckUserByEmailOrPhoneNumber(string emailphonenumber)
         {
             using (AccountService accountService = new AccountService(_dBContext))
             {
-                return accountService.ForgotPasswordCheck(emailphonenumber);
+                return accountService.CheckUserByEmailOrPhoneNumber(emailphonenumber);
             }
         }
 
@@ -51,6 +51,14 @@ namespace HospitalManagementSystem.Repository.Concrete
             using (AccountService accountService = new AccountService(_dBContext))
             {
                 return accountService.GetDepartmentList();
+            }
+        }
+
+        public ReturnResponseModel<UserModel> UpdatePassword(string emailphonenumber, string newPassword, string confirmPassword)
+        {
+            using (AccountService accountService = new AccountService(_dBContext))
+            {
+                return accountService.UpdatePassword(emailphonenumber, newPassword, confirmPassword);
             }
         }
     }
