@@ -10,7 +10,7 @@ namespace HospitalManagementSystem.Data.DBClasses
         [Required]
         [ForeignKey("DepartmentMaster")]
         public int DepartmentId { get; set; }
-        public virtual DepartmentMaster DepartmentMaster { get; set; }
+        public DepartmentMaster DepartmentMaster { get; set; }
 
         [Required]
         [StringLength(50)]

@@ -1,31 +1,64 @@
 ﻿using HospitalManagementSystem.Data;
 using HospitalManagementSystem.Models.Common;
+using HospitalManagementSystem.Models.InputModels;
 using HospitalManagementSystem.Models.Models;
+using HospitalManagementSystem.Models.UIModels;
 using HospitalManagementSystem.Repository.Abstract;
 using HospitalManagementSystem.Service.Interactions;
 
 namespace HospitalManagementSystem.Repository.Concrete
 {
-    public class AccountRepository:IAccountRepository
+    public class AccountRepository : IAccountRepository
     {
         ApplicationDBContext _dBContext;
         public AccountRepository(ApplicationDBContext applicationDBContext)
         {
             _dBContext = applicationDBContext;
         }
-        public ReturnResponseModel<UserModel> CheckLoginDetails(string email, string password)
+        public ReturnResponseModel<UserModel> LoginCredentialCheck(string email, string password)
         {
             using (AccountService accountService = new AccountService(_dBContext))
             {
-                return accountService.LoginCredentialCheck(email,password);
+                return accountService.LoginCredentialCheck(email, password);
             }
         }
 
-        public ReturnResponseModel<UserModel> ForgetPasswordDetails(string emailphonenumber)
+        public ReturnResponseModel<UserModel> CheckUserByEmailOrPhoneNumber(string emailphonenumber)
         {
             using (AccountService accountService = new AccountService(_dBContext))
             {
-                return accountService.ForgotPasswordCheck(emailphonenumber);
+                return accountService.CheckUserByEmailOrPhoneNumber(emailphonenumber);
+            }
+        }
+
+        public ReturnResponseModel<RegisterUserUIModel> RegisterUser(RegisterUserInputModel registerUser)
+        {
+            using (AccountService accountService = new AccountService(_dBContext))
+            {
+                return accountService.RegisterUser(registerUser);
+            }
+        }
+
+        public List<DesignationModel> GetDesignationList()
+        {
+            using (AccountService accountService = new AccountService(_dBContext))
+            {
+                return accountService.GetDesignationList();
+            }
+        }
+        public List<DepartmentModel> GetDepartmentList()
+        {
+            using (AccountService accountService = new AccountService(_dBContext))
+            {
+                return accountService.GetDepartmentList();
+            }
+        }
+
+        public ReturnResponseModel<UserModel> UpdatePassword(string emailphonenumber, string newPassword, string confirmPassword)
+        {
+            using (AccountService accountService = new AccountService(_dBContext))
+            {
+                return accountService.UpdatePassword(emailphonenumber, newPassword, confirmPassword);
             }
         }
     }

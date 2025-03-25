@@ -1,14 +1,14 @@
 ﻿@model HospitalManagementSystem.Models.UIModels.LoginUIModel;
-
 @{
 	ViewData["Title"] = "Login";
 	Layout = null;
 }
 
-<script src="~/theme/js/core/jquery-3.7.1.min.js"></script>
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
 
 <style>
@@ -87,32 +87,39 @@
 				<div style="float:right; font-size: 80%; position: relative; top:-10px"><a type="button" data-toggle="modal" data-target="#mdlForgotPassword">Forgot password?</a></div>
 			</div>
 			<div style="padding-top:30px" class="panel-body">
-				@* @using (Html.BeginForm("Login", "Account", FormMethod.Post)) *@
-				@* { *@
 				<form asp-controller="Account" asp-action="Login" method="post" class="row">
-
 					@if (Model.status == false && !string.IsNullOrEmpty(Model.Message))
 					{
 						<div class="alert alert-danger alert-dismissible mb-0" style="margin-left: 5px; margin-right: 5px" role="alert">
-							@(Model.Message)
+							@Model.Message
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					}
+					else if (Model.status == true && !string.IsNullOrEmpty(Model.Message))
+					{
+						<div class="alert alert-info alert-dismissible mb-0" style="margin-left: 5px; margin-right: 5px" role="alert">
+							@Model.Message
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
 					}
 
-					<div style="margin-bottom: 25px; margin-left: 5px; margin-right: 5px" class="input-group">
-						@* @Html.AntiForgeryToken() *@
+					<div style="margin-left: 5px; margin-right: 5px" class="input-group">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-						@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", value = Model.Email ?? "amrit@gmail.com" } })
+						@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", value = Model.Email ?? "amrit@gmail.com", placeholder = "Email Address" } })
 					</div>
+						<span asp-validation-for="registerUser.Email" class="text-danger" style="margin-left:50px"></span>
 
-					<div style="margin-bottom: 25px; margin-left: 5px; margin-right: 5px" class="input-group">
+					<div style="margin-top: 25px; margin-left: 5px; margin-right: 5px" class="input-group">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-						@Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", type="password", value = Model.Password ?? "admin123" } })
+						@Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", type = "password", value = Model.Password ?? "admin123", placeholder = "Password" } })
 					</div>
+					<span asp-validation-for="registerUser.Password" class="text-danger" style="margin-left:50px"></span>
 
-					<div class="input-group" style="margin-left: 5px">
+					<div class="input-group" style="margin-left: 5px; margin-top: 25px;">
 						<div class="checkbox">
 							<label>
 								<input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
@@ -151,46 +158,145 @@
 			<div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a></div>
 		</div>
 		<div class="panel-body">
-			<form asp-action="Register" id="signupform" class="form-horizontal" role="form">
-				<div id="signupalert" style="display:none" class="alert alert-danger">
-					<p>Error:</p>
-					<span></span>
-				</div>
+			<form asp-controller="Account" asp-action="RegisterUser" method="post" id="signupform" class="form-horizontal" role="form">
 				<div class="form-group">
-					<label for="email" class="col-md-3 control-label">Email</label>
+					<label for="Email" class="col-md-3 control-label">Email</label>
 					<div class="col-md-9">
-						<input type="text" class="form-control" name="email" placeholder="Email Address">
-						@* @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } }) *@
+						@Html.EditorFor(model => model.registerUser.Email,
+															new
+															{
+																htmlAttributes = new
+																{
+																	@class = "form-control",
+																	placeholder = "Email Address"
+																}
+															})
+						<span asp-validation-for="registerUser.Email" class="text-danger"></span>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="firstname" class="col-md-3 control-label">First Name</label>
+					<label for="FirstName" class="col-md-3 control-label">First Name</label>
 					<div class="col-md-9">
-						<input type="text" class="form-control" name="firstname" placeholder="First Name">
+						@Html.EditorFor(model => model.registerUser.FirstName,
+															new
+															{
+																htmlAttributes = new
+																{
+																	@class = "form-control",
+																	placeholder = "First Name"
+																}
+															})
+						<span asp-validation-for="registerUser.FirstName" class="text-danger"></span>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="lastname" class="col-md-3 control-label">Last Name</label>
+					<label for="LastName" class="col-md-3 control-label">Last Name</label>
 					<div class="col-md-9">
-						<input type="text" class="form-control" name="lastname" placeholder="Last Name">
+						@Html.EditorFor(Model => Model.registerUser.LastName,
+															new
+															{
+																htmlAttributes = new
+																{
+																	@class = "form-control",
+																	placeholder = "Last Name"
+																}
+															})
+						<span asp-validation-for="registerUser.LastName" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="PhoneNumber" class="col-md-3 control-label">Phone Number</label>
+					<div class="col-md-9">
+						@Html.EditorFor(Model => Model.registerUser.PhoneNumber,
+															new
+															{
+																htmlAttributes = new
+																{
+																	@class = "form-control",
+																	placeholder = "Phone Number"
+																}
+															})
+						<span asp-validation-for="registerUser.PhoneNumber" class="text-danger"></span>
+					</div>
+				</div>
+
+				 <div class="form-group" id="IsDoctor">
+				 	<label for="IsDoctor" class="col-md-3 control-label">Doctor</label> 
+				 	<div class="col-md-9"> 
+				 		<select asp-for="registerUser.IsDoctor" class="form-control" required>
+				 			<option value="" selected>Select</option>
+				 			<option value="true">Yes</option> 
+				 			<option value="false">No</option>
+				 		</select> 
+				 		<span asp-validation-for="registerUser.IsDoctor" class="text-danger"></span> 
+				 	</div> 
+				 </div> 
+			
+				<div class="form-group" id="departmentGroup">
+					<label for="DepartmentId" class="col-md-3 control-label">Department</label>
+					<div class="col-md-9">
+						@if (Model.registerUser?.DepartmentList != null)
+						{
+							@Html.DropDownListFor(model => model.registerUser.DepartmentList,
+																new SelectList(Model.registerUser.DepartmentList, "key", "value"),
+																"Select Department", new { @class = "form-control", name = "department", @required = "required" })
+						}
+						<span asp-validation-for="registerUser.DepartmentList" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="form-group" id="designationGroup">
+					<label for="designation" class="col-md-3 control-label">Designation</label>
+					<div class="col-md-9">
+						@if (Model.registerUser?.DesignationList != null)
+						{
+							@Html.DropDownListFor(model => model.registerUser.DesignationId,
+																new SelectList(Model.registerUser.DesignationList, "key", "value"),
+																"Select Designation", new { @class = "form-control", name = "designation", @required = "required" })
+						}
+						<span asp-validation-for="registerUser.DesignationList" class="text-danger"></span>
+
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="Password" class="col-md-3 control-label">Password</label>
+					<div class="col-md-9">
+						@Html.EditorFor(Model => Model.registerUser.Password,
+															new
+															{
+																htmlAttributes = new
+																{
+																	@class = "form-control",
+																	placeholder = "Password",
+																	type = "password"
+																}
+															})
+						<span asp-validation-for="registerUser.Password" class="text-danger"></span>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="password" class="col-md-3 control-label">Password</label>
+					<label for="ConfirmPassword" class="col-md-3 control-label">Confirm Password</label>
 					<div class="col-md-9">
-						<input type="password" class="form-control" name="passwd" placeholder="Password">
+						@Html.EditorFor(Model => Model.registerUser.ConfirmPassword,
+															new
+															{
+																htmlAttributes = new
+																{
+																	@class = "form-control",
+																	placeholder = "Confirm Password",
+																	type = "password"
+																}
+															})
+						<span asp-validation-for="registerUser.ConfirmPassword" class="text-danger"></span>
 					</div>
 				</div>
-				<div class="form-group">
-					<label for="icode" class="col-md-3 control-label">Invitation Code</label>
-					<div class="col-md-9">
-						<input type="text" class="form-control" name="icode" placeholder="">
-					</div>
-				</div>
+
 				<div class="form-group">
 					<!-- Button -->
 					<div class="col-md-offset-3 col-md-9">
-						<button id="btn-signup" type="button" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp Sign Up</button>
+						<button type="submit" name="btnSignup" id="btnSignup" class="btn btn-info"><i class="icon-hand-right" onclick="return Validate()"></i> &nbsp Sign Up</button>
 						<span style="margin-left:8px;">or</span>
 						<button id="btn-fbsignup" type="button" class="btn btn-primary" style="margin-left:8px;"><i class="icon-facebook"></i>   Sign Up with Facebook</button>
 					</div>
@@ -213,4 +319,3 @@
 <div class="modal fade" id="mdlForgotPassword" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordLabel" aria-hidden="true">
 	@Html.Partial("_ForgotPassword", Model.forgotPassword);
 </div>
-

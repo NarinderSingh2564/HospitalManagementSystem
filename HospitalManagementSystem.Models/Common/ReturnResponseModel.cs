@@ -4,6 +4,6 @@
     {
         public bool status { get; set; }
         public string message { get; set; }
-        public T Data { get; set; }
+        public T Data { get; set; } 
     }
 }
