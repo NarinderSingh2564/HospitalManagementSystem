@@ -212,25 +212,6 @@ namespace HospitalManagementSystem.Service.Interactions
                     }
                     else
                     {
-                        #region
-                        //var userMaster = new UserMaster
-                        //{
-                        //    FirstName = registerUserInputModel.FirstName,
-                        //    LastName = registerUserInputModel.LastName,
-                        //    Email = registerUserInputModel.Email,
-                        //    PhoneNumber = registerUserInputModel.PhoneNumber,
-                        //    IsDoctor = registerUserInputModel.IsDoctor,
-                        //    DesignationId = registerUserInputModel.DesignationId,
-                        //    Password = registerUserInputModel.Password,
-                        //    CreatedBy = 1,
-                        //    CreatedOn = DateTime.UtcNow,
-                        //    IsStaff = "Yes",
-                        //    userMaster.IsStaff = "Yes";
-                        //    userMaster.isActive = true;
-                        //    isActive = true
-                        //};
-                        #endregion
-
                         var userMaster = _mapper.Map<UserMaster>(registerUserInputModel);
                         userMaster.CreatedBy = 1;
                         userMaster.CreatedOn = DateTime.UtcNow;
