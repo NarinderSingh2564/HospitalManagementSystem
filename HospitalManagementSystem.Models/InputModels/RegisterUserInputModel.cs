@@ -1,6 +1,4 @@
-﻿using HospitalManagementSystem.Models.Common;
-
-namespace HospitalManagementSystem.Models.InputModels
+﻿namespace HospitalManagementSystem.Models.InputModels
 {
     public class RegisterUserInputModel
     {
@@ -9,17 +7,15 @@ namespace HospitalManagementSystem.Models.InputModels
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public bool IsDoctor { get; set; }
-        public string DepartmentId { get; set; }
-        public List<KeyValueModel<int, string>> DepartmentList { get; set; }
-        public string DesignationId { get; set; }
-        public List<KeyValueModel<int, string>> DesignationList { get; set; }
+        public int? DepartmentId { get; set; }
+        public int? DesignationId { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
-        public int UpdatedBy { get; set; }
-        public DateTime UpdatedOn { get; set; }
-        public string isActive { get; set; }
-
+        public int? UpdatedBy { get; set; } = null;
+        public DateTime? UpdatedOn { get; set; } = null;
+        public bool isActive { get; set; }
+        public string IsStaff { get; set; } = "Yes";
     }
 }

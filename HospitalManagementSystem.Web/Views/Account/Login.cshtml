@@ -7,8 +7,9 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
 
 <style>
@@ -109,15 +110,25 @@
 
 					<div style="margin-left: 5px; margin-right: 5px" class="input-group">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-						@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", value = Model.Email ?? "amrit@gmail.com", placeholder = "Email Address" } })
+						@Html.EditorFor(model => model.Email, new
+							{
+								htmlAttributes = new
+								{
+									@class = "form-control",
+									value = Model.Email ?? "amrit@gmail.com",
+									placeholder = "Email Address",
+									id = "EmailSignIn"  
+								}
+							})
+
 					</div>
-						<span asp-validation-for="registerUser.Email" class="text-danger" style="margin-left:50px"></span>
+						<span asp-validation-for="Email" class="text-danger" style="margin-left:50px"></span>
 
 					<div style="margin-top: 25px; margin-left: 5px; margin-right: 5px" class="input-group">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-						@Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", type = "password", value = Model.Password ?? "admin123", placeholder = "Password" } })
+						@Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", type = "password", value = Model.Password ?? "admin123", placeholder = "Password", id = "PasswordSignIn" } })
 					</div>
-					<span asp-validation-for="registerUser.Password" class="text-danger" style="margin-left:50px"></span>
+					<span asp-validation-for="Password" class="text-danger" style="margin-left:50px"></span>
 
 					<div class="input-group" style="margin-left: 5px; margin-top: 25px;">
 						<div class="checkbox">
@@ -139,7 +150,7 @@
 						<div class="col-md-12 control">
 							<div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
 								Don't have an account!
-								<a href="#" onClick="$('#loginbox').hide(); $('#signupbox').show()">
+								<a type="button" data-toggle="modal" data-target="#dvSignUp">
 									Sign Up Here
 								</a>
 							</div>
@@ -151,171 +162,11 @@
 	</div>
 </div>
 
-<div id="signupbox" style="display:none; margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-	<div class="panel panel-info">
-		<div class="panel-heading">
-			<div class="panel-title">Sign Up</div>
-			<div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a></div>
-		</div>
-		<div class="panel-body">
-			<form asp-controller="Account" asp-action="RegisterUser" method="post" id="signupform" class="form-horizontal" role="form">
-				<div class="form-group">
-					<label for="Email" class="col-md-3 control-label">Email</label>
-					<div class="col-md-9">
-						@Html.EditorFor(model => model.registerUser.Email,
-															new
-															{
-																htmlAttributes = new
-																{
-																	@class = "form-control",
-																	placeholder = "Email Address"
-																}
-															})
-						<span asp-validation-for="registerUser.Email" class="text-danger"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="FirstName" class="col-md-3 control-label">First Name</label>
-					<div class="col-md-9">
-						@Html.EditorFor(model => model.registerUser.FirstName,
-															new
-															{
-																htmlAttributes = new
-																{
-																	@class = "form-control",
-																	placeholder = "First Name"
-																}
-															})
-						<span asp-validation-for="registerUser.FirstName" class="text-danger"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="LastName" class="col-md-3 control-label">Last Name</label>
-					<div class="col-md-9">
-						@Html.EditorFor(Model => Model.registerUser.LastName,
-															new
-															{
-																htmlAttributes = new
-																{
-																	@class = "form-control",
-																	placeholder = "Last Name"
-																}
-															})
-						<span asp-validation-for="registerUser.LastName" class="text-danger"></span>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label for="PhoneNumber" class="col-md-3 control-label">Phone Number</label>
-					<div class="col-md-9">
-						@Html.EditorFor(Model => Model.registerUser.PhoneNumber,
-															new
-															{
-																htmlAttributes = new
-																{
-																	@class = "form-control",
-																	placeholder = "Phone Number"
-																}
-															})
-						<span asp-validation-for="registerUser.PhoneNumber" class="text-danger"></span>
-					</div>
-				</div>
-
-				 <div class="form-group" id="IsDoctor">
-				 	<label for="IsDoctor" class="col-md-3 control-label">Doctor</label> 
-				 	<div class="col-md-9"> 
-				 		<select asp-for="registerUser.IsDoctor" class="form-control" required>
-				 			<option value="" selected>Select</option>
-				 			<option value="true">Yes</option> 
-				 			<option value="false">No</option>
-				 		</select> 
-				 		<span asp-validation-for="registerUser.IsDoctor" class="text-danger"></span> 
-				 	</div> 
-				 </div> 
-			
-				<div class="form-group" id="departmentGroup">
-					<label for="DepartmentId" class="col-md-3 control-label">Department</label>
-					<div class="col-md-9">
-						@if (Model.registerUser?.DepartmentList != null)
-						{
-							@Html.DropDownListFor(model => model.registerUser.DepartmentList,
-																new SelectList(Model.registerUser.DepartmentList, "key", "value"),
-																"Select Department", new { @class = "form-control", name = "department", @required = "required" })
-						}
-						<span asp-validation-for="registerUser.DepartmentList" class="text-danger"></span>
-					</div>
-				</div>
-
-				<div class="form-group" id="designationGroup">
-					<label for="designation" class="col-md-3 control-label">Designation</label>
-					<div class="col-md-9">
-						@if (Model.registerUser?.DesignationList != null)
-						{
-							@Html.DropDownListFor(model => model.registerUser.DesignationId,
-																new SelectList(Model.registerUser.DesignationList, "key", "value"),
-																"Select Designation", new { @class = "form-control", name = "designation", @required = "required" })
-						}
-						<span asp-validation-for="registerUser.DesignationList" class="text-danger"></span>
-
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label for="Password" class="col-md-3 control-label">Password</label>
-					<div class="col-md-9">
-						@Html.EditorFor(Model => Model.registerUser.Password,
-															new
-															{
-																htmlAttributes = new
-																{
-																	@class = "form-control",
-																	placeholder = "Password",
-																	type = "password"
-																}
-															})
-						<span asp-validation-for="registerUser.Password" class="text-danger"></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="ConfirmPassword" class="col-md-3 control-label">Confirm Password</label>
-					<div class="col-md-9">
-						@Html.EditorFor(Model => Model.registerUser.ConfirmPassword,
-															new
-															{
-																htmlAttributes = new
-																{
-																	@class = "form-control",
-																	placeholder = "Confirm Password",
-																	type = "password"
-																}
-															})
-						<span asp-validation-for="registerUser.ConfirmPassword" class="text-danger"></span>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<!-- Button -->
-					<div class="col-md-offset-3 col-md-9">
-						<button type="submit" name="btnSignup" id="btnSignup" class="btn btn-info"><i class="icon-hand-right" onclick="return Validate()"></i> &nbsp Sign Up</button>
-						<span style="margin-left:8px;">or</span>
-						<button id="btn-fbsignup" type="button" class="btn btn-primary" style="margin-left:8px;"><i class="icon-facebook"></i>   Sign Up with Facebook</button>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-md-12 control">
-						<div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
-							Already have an account!
-							<a href="#" onClick="$('#signupbox').hide(); $('#loginbox').show()">
-								Sign In Here
-							</a>
-						</div>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
+<div class="modal fade" id="dvSignUp" tabindex="-1" role="dialog" aria-labelledby="signUpLabel" aria-hidden="true">
+	@Html.Partial("_SignUp", Model.registerUser);
 </div>
 
 <div class="modal fade" id="mdlForgotPassword" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordLabel" aria-hidden="true">
 	@Html.Partial("_ForgotPassword", Model.forgotPassword);
 </div>
+

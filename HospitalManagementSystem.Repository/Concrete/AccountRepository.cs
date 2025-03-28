@@ -1,4 +1,5 @@
-﻿using HospitalManagementSystem.Data;
+﻿using AutoMapper;
+using HospitalManagementSystem.Data;
 using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.InputModels;
 using HospitalManagementSystem.Models.Models;
@@ -11,13 +12,15 @@ namespace HospitalManagementSystem.Repository.Concrete
     public class AccountRepository : IAccountRepository
     {
         ApplicationDBContext _dBContext;
-        public AccountRepository(ApplicationDBContext applicationDBContext)
+        IMapper _mapper;
+        public AccountRepository(ApplicationDBContext applicationDBContext, IMapper mapper)
         {
             _dBContext = applicationDBContext;
+            _mapper = mapper;
         }
         public ReturnResponseModel<UserModel> LoginCredentialCheck(string email, string password)
         {
-            using (AccountService accountService = new AccountService(_dBContext))
+            using (AccountService accountService = new AccountService(_dBContext, _mapper))
             {
                 return accountService.LoginCredentialCheck(email, password);
             }
@@ -25,15 +28,15 @@ namespace HospitalManagementSystem.Repository.Concrete
 
         public ReturnResponseModel<UserModel> CheckUserByEmailOrPhoneNumber(string emailphonenumber)
         {
-            using (AccountService accountService = new AccountService(_dBContext))
+            using (AccountService accountService = new AccountService(_dBContext, _mapper))
             {
                 return accountService.CheckUserByEmailOrPhoneNumber(emailphonenumber);
             }
         }
 
-        public ReturnResponseModel<RegisterUserUIModel> RegisterUser(RegisterUserInputModel registerUser)
+        public ReturnResponseModel<string> RegisterUser(RegisterUserInputModel registerUser)
         {
-            using (AccountService accountService = new AccountService(_dBContext))
+            using (AccountService accountService = new AccountService(_dBContext, _mapper))
             {
                 return accountService.RegisterUser(registerUser);
             }
@@ -41,14 +44,14 @@ namespace HospitalManagementSystem.Repository.Concrete
 
         public List<DesignationModel> GetDesignationList()
         {
-            using (AccountService accountService = new AccountService(_dBContext))
+            using (AccountService accountService = new AccountService(_dBContext, _mapper))
             {
                 return accountService.GetDesignationList();
             }
         }
         public List<DepartmentModel> GetDepartmentList()
         {
-            using (AccountService accountService = new AccountService(_dBContext))
+            using (AccountService accountService = new AccountService(_dBContext, _mapper))
             {
                 return accountService.GetDepartmentList();
             }
@@ -56,7 +59,7 @@ namespace HospitalManagementSystem.Repository.Concrete
 
         public ReturnResponseModel<UserModel> UpdatePassword(string emailphonenumber, string newPassword, string confirmPassword)
         {
-            using (AccountService accountService = new AccountService(_dBContext))
+            using (AccountService accountService = new AccountService(_dBContext, _mapper))
             {
                 return accountService.UpdatePassword(emailphonenumber, newPassword, confirmPassword);
             }

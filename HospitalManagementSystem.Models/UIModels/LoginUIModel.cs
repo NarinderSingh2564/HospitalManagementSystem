@@ -16,6 +16,7 @@ namespace HospitalManagementSystem.Models.UIModels
         public string Email { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
         [MinLength(6, ErrorMessage = "Password must be at least 6 characters.")]
         public string Password { get; set; }
         public bool? status { get; set; }
@@ -27,13 +28,13 @@ namespace HospitalManagementSystem.Models.UIModels
 
     public class ForgotPasswordUIModel
     {
-        [Required]
-        [Display(Name = "Value is required")]
+        [Required(ErrorMessage = "Value is required.")]
         public string EmailPhoneNumber { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "New Password is required")]
+        [Display(Name = "Password is required")]
+        [MinLength(6, ErrorMessage = "Password must be at least 6 characters.")]
         public string NewPassword { get; set; }
 
         [Required]
@@ -47,7 +48,7 @@ namespace HospitalManagementSystem.Models.UIModels
 
     public class RegisterUserUIModel
     {
-        [Required]
+        [Required(ErrorMessage = "First Name is required.")]
         [Display(Name = "First name is required")]
         public string FirstName { get; set; }
 
@@ -56,6 +57,7 @@ namespace HospitalManagementSystem.Models.UIModels
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]
+        [RegularExpression("^[a-zA-Z0-9@.]*$", ErrorMessage = "Only Alphabets and Numbers allowed.")]
         [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string Email { get; set; }
 
@@ -76,14 +78,16 @@ namespace HospitalManagementSystem.Models.UIModels
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password is required")]
+        [MinLength(6, ErrorMessage = "Password must be at least 6 characters.")]
         public string Password { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password is required")]
         [Compare("Password", ErrorMessage = "Password and Confirm Password do not match.")]
-        public string ConfirmPassword { get; set; }       
-        public string isActive { get; set; }
-
+        public string ConfirmPassword { get; set; }
+        public bool isActive { get; set; } = true;
+        public string Message { get; set; }
+        public bool Status { get; set; }
     }
 }

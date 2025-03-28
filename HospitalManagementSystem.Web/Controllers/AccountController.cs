@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.InputModels;
-using HospitalManagementSystem.Models.Models;
 using HospitalManagementSystem.Models.UIModels;
 using HospitalManagementSystem.Repository.Abstract;
 using Microsoft.AspNetCore.Mvc;
@@ -82,6 +80,8 @@ namespace HospitalManagementSystem.Web.Controllers
 
                     if (returnResponse.status)
                     {
+                        returnResponseModel.EmailPhoneNumber = forgetPasswordUIModel.EmailPhoneNumber;
+
                         if (!string.IsNullOrEmpty(forgetPasswordUIModel.NewPassword) && !string.IsNullOrEmpty(forgetPasswordUIModel.ConfirmPassword))
                         {
                             var updatePasswordResponse = _accountRepository.UpdatePassword(forgetPasswordUIModel.EmailPhoneNumber, forgetPasswordUIModel.NewPassword, forgetPasswordUIModel.ConfirmPassword);
@@ -101,64 +101,43 @@ namespace HospitalManagementSystem.Web.Controllers
                 returnResponseModel.Status = false;
                 returnResponseModel.Message = ex.Message;
             }
+
             return PartialView("_ForgotPassword", returnResponseModel);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult RegisterUser(RegisterUserUIModel registerUser)
         {
+            var returnRegisterUser = new RegisterUserUIModel();
+
             try
             {
-                var loginUIModel = new LoginUIModel
-                {
-                    registerUser = registerUser
-                };
+                returnRegisterUser.DesignationList = _accountRepository.GetDesignationList().Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Designation }).ToList();
+                returnRegisterUser.DepartmentList = _accountRepository.GetDepartmentList().Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department }).ToList();
 
-                if (!ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
-                    loginUIModel.status = false;
-                    loginUIModel.Message = "Invalid registration attempt.";
-                    loginUIModel.registerUser.DesignationList = _accountRepository.GetDesignationList()
-                        .Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Designation })
-                        .ToList();
-                    loginUIModel.registerUser.DepartmentList = _accountRepository.GetDepartmentList()
-                        .Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department })
-                        .ToList();
+                    var registerUserInputModel = _mapper.Map<RegisterUserInputModel>(registerUser);
+                    var returnResponse = _accountRepository.RegisterUser(registerUserInputModel);
 
-                    return View("Login", loginUIModel);
+                    returnRegisterUser.Status = returnResponse.status;
+                    returnRegisterUser.Message = returnResponse.message;
                 }
-
-                var mapRegisterUserInputModel = _mapper.Map<RegisterUserInputModel>(registerUser);
-                var returnResponse = _accountRepository.RegisterUser(mapRegisterUserInputModel);
-
-                loginUIModel.status = returnResponse.status;
-                loginUIModel.Message = returnResponse.message;
-
-                if (!returnResponse.status)
+                else
                 {
-                    loginUIModel.registerUser.DesignationList = _accountRepository.GetDesignationList()
-                        .Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Designation })
-                        .ToList();
-                    loginUIModel.registerUser.DepartmentList = _accountRepository.GetDepartmentList()
-                        .Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department })
-                        .ToList();
-
-                    ModelState.Clear();
+                    returnRegisterUser.Status = false;
+                    returnRegisterUser.Message = "Invalid registration attempt.";
                 }
-
-                return View("Login", loginUIModel);
             }
             catch (Exception ex)
             {
-                var loginUIModel = new LoginUIModel
-                {
-                    status = false,
-                    Message = ex.Message
-                };
-                return View("Login", loginUIModel);
+                returnRegisterUser.Status = false;
+                returnRegisterUser.Message = ex.Message;
             }
+
+            ModelState.Clear();
+            return PartialView("_SignUp", returnRegisterUser);
         }
 
     }
