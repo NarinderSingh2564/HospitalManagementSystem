@@ -1,10 +1,10 @@
-﻿using System.ComponentModel;
+﻿using AutoMapper;
+using System.ComponentModel;
 using HospitalManagementSystem.Data;
 using HospitalManagementSystem.Data.DBClasses;
 using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.InputModels;
 using HospitalManagementSystem.Models.Models;
-using HospitalManagementSystem.Models.UIModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace HospitalManagementSystem.Service.Interactions
@@ -13,6 +13,7 @@ namespace HospitalManagementSystem.Service.Interactions
     {
         #region Private Variables
         private ApplicationDBContext _dbcontext;
+        private readonly IMapper _mapper;
 
         private Component component = new Component();
         private bool disposed = false;
@@ -40,9 +41,10 @@ namespace HospitalManagementSystem.Service.Interactions
         #endregion
 
         #region Constructor
-        public AccountService(ApplicationDBContext dBContext)
+        public AccountService(ApplicationDBContext dBContext, IMapper mapper)
         {
             _dbcontext = dBContext;
+            _mapper = mapper;
         }
         #endregion
 
@@ -63,7 +65,7 @@ namespace HospitalManagementSystem.Service.Interactions
                 return returnResponseModel;
             }
 
-            dynamic dbUserMasterObj = _dbcontext.UserMaster.FirstOrDefault(u => u.Email == email);
+            dynamic dbUserMasterObj = _dbcontext.UserMaster.Where(u => u.Email == email).FirstOrDefault();
 
             if (dbUserMasterObj != null)
             {
@@ -107,8 +109,8 @@ namespace HospitalManagementSystem.Service.Interactions
                 return returnResponseModel;
             }
 
-            var dbUserEmailObj = _dbcontext.UserMaster.FirstOrDefault(u => u.Email == emailphonenumber);
-            var dbUserPhoneNumberObj = _dbcontext.UserMaster.FirstOrDefault(u => u.PhoneNumber == emailphonenumber);
+            var dbUserEmailObj = _dbcontext.UserMaster.Where(u => u.Email == emailphonenumber).FirstOrDefault();
+            var dbUserPhoneNumberObj = _dbcontext.UserMaster.Where(u => u.PhoneNumber == emailphonenumber).FirstOrDefault();
 
             if (dbUserEmailObj != null)
             {
@@ -154,23 +156,21 @@ namespace HospitalManagementSystem.Service.Interactions
             if (newPassword != confirmPassword)
             {
                 returnResponseModel.status = false;
-                returnResponseModel.message = "New password and confirm password do not match.";
+                returnResponseModel.message = "New password and confirm password do not match. Please try again!";
                 return returnResponseModel;
             }
 
-            var dbUserObj = _dbcontext.UserMaster.FirstOrDefault(u => u.Email == emailphonenumber || u.PhoneNumber == emailphonenumber);
+            var dbUserObj = _dbcontext.UserMaster.Where(u => u.Email == emailphonenumber || u.PhoneNumber == emailphonenumber).FirstOrDefault();
 
             if (dbUserObj == null)
             {
                 returnResponseModel.status = false;
-                returnResponseModel.message = "No user found with the provided data.";
-                return returnResponseModel;
+                returnResponseModel.message = "No user found with the provided data. Please try again!";
             }
             else if (dbUserObj.Password == newPassword)
             {
                 returnResponseModel.status = false;
                 returnResponseModel.message = "New password cannot be the same as the old password.";
-                return returnResponseModel;
             }
             else
             {
@@ -178,48 +178,47 @@ namespace HospitalManagementSystem.Service.Interactions
                 _dbcontext.SaveChanges();
 
                 returnResponseModel.status = true;
-                returnResponseModel.message = "Password updated successfully. Please Login";
+                returnResponseModel.message = "Password updated successfully. Please Login!";
             }
             return returnResponseModel;
         }
 
-        public ReturnResponseModel<RegisterUserUIModel> RegisterUser(RegisterUserInputModel registerUser)
+        public ReturnResponseModel<string> RegisterUser(RegisterUserInputModel registerUserInputModel)
         {
-            var returnResponseModel = new ReturnResponseModel<RegisterUserUIModel>();
-            var dbEmailExist = _dbcontext.UserMaster.FirstOrDefault(u => u.Email == registerUser.Email);
+            var returnResponseModel = new ReturnResponseModel<string>();
 
-            if (dbEmailExist != null)
+            var dbUserEntityByEmail = _dbcontext.UserMaster.Where(u => u.Email == registerUserInputModel.Email).FirstOrDefault();
+
+            if (dbUserEntityByEmail != null)
             {
                 returnResponseModel.message = "Email already exists. Please Login...";
                 returnResponseModel.status = false;
             }
             else
             {
-                var dbPhoneNumberExist = _dbcontext.UserMaster.FirstOrDefault(u => u.PhoneNumber == registerUser.PhoneNumber);
-                if (dbPhoneNumberExist != null)
+                var dbUserEntityByPhoneNumber = _dbcontext.UserMaster.Where(u => u.PhoneNumber == registerUserInputModel.PhoneNumber).FirstOrDefault();
+
+                if (dbUserEntityByPhoneNumber != null)
                 {
                     returnResponseModel.message = "Phone number already exists. Please Login...";
                     returnResponseModel.status = false;
                 }
                 else
                 {
-                    var userMaster = new UserMaster
+                    if (registerUserInputModel.Password != registerUserInputModel.ConfirmPassword)
                     {
-                        FirstName = registerUser.FirstName,
-                        LastName = registerUser.LastName,
-                        Email = registerUser.Email,
-                        PhoneNumber = registerUser.PhoneNumber,
-                        IsDoctor = registerUser.IsDoctor,
-                        DesignationId = Convert.ToInt32(registerUser.DesignationId),
-                        Password = registerUser.Password,
-                        CreatedBy = 1,
-                        CreatedOn = DateTime.UtcNow,
-                        IsStaff = "Yes",
-                        isActive = true
-                    };
-                    _dbcontext.UserMaster.Add(userMaster);
-                    _dbcontext.SaveChanges();
+                        returnResponseModel.message = "Password and Confirm Password do not match. Please try again.";
+                        returnResponseModel.status = false;
+                    }
+                    else
+                    {
+                        var userMaster = _mapper.Map<UserMaster>(registerUserInputModel);
+                        userMaster.CreatedBy = 1;
+                        userMaster.CreatedOn = DateTime.UtcNow;
 
+                        _dbcontext.UserMaster.Add(userMaster);
+                        _dbcontext.SaveChanges();
+                    }
                     returnResponseModel.message = "Registration successful! Please Login...";
                     returnResponseModel.status = true;
                 }

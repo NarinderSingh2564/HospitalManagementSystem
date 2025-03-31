@@ -9,7 +9,7 @@ namespace HospitalManagementSystem.Repository.Abstract
     {
         ReturnResponseModel<UserModel> LoginCredentialCheck(string email, string password);
         ReturnResponseModel<UserModel> CheckUserByEmailOrPhoneNumber(string emailphonenumber);
-        ReturnResponseModel<RegisterUserUIModel> RegisterUser(RegisterUserInputModel registerUser);
+        ReturnResponseModel<string> RegisterUser(RegisterUserInputModel registerUser);
         List<DesignationModel> GetDesignationList();
         List<DepartmentModel> GetDepartmentList();
         ReturnResponseModel<UserModel> UpdatePassword(string emailphonenumber, string newPassword, string confirmPassword);
