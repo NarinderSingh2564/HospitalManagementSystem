@@ -82,10 +82,10 @@ namespace HospitalManagementSystem.Data.DBClasses
         public DateTime CreatedOn { get; set; }
         public int? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-
+       
         [StringLength(4)]
         [Column(TypeName = "varchar(4)")]
-        public bool isActive { get; set; }
+        public string isActive { get; set; }
         public string IsStaff { get; set; }
     }
 }

@@ -3,7 +3,6 @@ using HospitalManagementSystem.Data;
 using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.InputModels;
 using HospitalManagementSystem.Models.Models;
-using HospitalManagementSystem.Models.UIModels;
 using HospitalManagementSystem.Repository.Abstract;
 using HospitalManagementSystem.Service.Interactions;
 
@@ -26,7 +25,7 @@ namespace HospitalManagementSystem.Repository.Concrete
             }
         }
 
-        public ReturnResponseModel<UserModel> CheckUserByEmailOrPhoneNumber(string emailphonenumber)
+        public ReturnResponseModel<string> CheckUserByEmailOrPhoneNumber(string emailphonenumber)
         {
             using (AccountService accountService = new AccountService(_dBContext, _mapper))
             {
@@ -41,19 +40,28 @@ namespace HospitalManagementSystem.Repository.Concrete
                 return accountService.RegisterUser(registerUser);
             }
         }
-
-        public List<DesignationModel> GetDesignationList()
-        {
-            using (AccountService accountService = new AccountService(_dBContext, _mapper))
-            {
-                return accountService.GetDesignationList();
-            }
-        }
+       
         public List<DepartmentModel> GetDepartmentList()
         {
             using (AccountService accountService = new AccountService(_dBContext, _mapper))
             {
                 return accountService.GetDepartmentList();
+            }
+        }
+
+        //public List<DesignationModel> GetDesignationList()
+        //{
+        //    using (AccountService accountService = new AccountService(_dBContext, _mapper))
+        //    {
+        //        return accountService.GetDesignationList();
+        //    }
+        //}
+
+        public List<KeyValueModel<int, string>> GetDesignationsByDepartmentId(int departmentId)
+        {
+            using (AccountService accountService = new AccountService(_dBContext, _mapper))
+            {
+                return accountService.GetDesignationsByDepartmentId(departmentId);
             }
         }
 

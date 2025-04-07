@@ -19,7 +19,7 @@ namespace HospitalManagementSystem.Models.UIModels
         [DataType(DataType.Password)]
         [MinLength(6, ErrorMessage = "Password must be at least 6 characters.")]
         public string Password { get; set; }
-        public bool? status { get; set; }
+        public bool? Status { get; set; }
         public string Message { get; set; }
         public ForgotPasswordUIModel forgotPassword { get; set; }
         public RegisterUserUIModel registerUser { get; set; }
@@ -48,6 +48,12 @@ namespace HospitalManagementSystem.Models.UIModels
 
     public class RegisterUserUIModel
     {
+        public RegisterUserUIModel()
+        {
+            DepartmentList = new List<KeyValueModel<int, string>>();
+            DesignationList = new List<KeyValueModel<int, string>>();
+        }
+
         [Required(ErrorMessage = "First Name is required.")]
         [Display(Name = "First name is required")]
         public string FirstName { get; set; }
@@ -68,11 +74,13 @@ namespace HospitalManagementSystem.Models.UIModels
         [Required]
         [Display(Name = "Select the valid option")]
         public bool IsDoctor { get; set; }
-
-        public string DepartmentId { get; set; }
+        
+        [Required]
+        public int DepartmentId { get; set; }
         public List<KeyValueModel<int, string>> DepartmentList { get; set; }
 
-        public string DesignationId { get; set; }
+        [Required]
+        public int? DesignationId { get; set; }
         public List<KeyValueModel<int, string>> DesignationList { get; set; }
 
         [Required]
@@ -90,4 +98,6 @@ namespace HospitalManagementSystem.Models.UIModels
         public string Message { get; set; }
         public bool Status { get; set; }
     }
+
+    //RegisterPatientUIModel
 }

@@ -31,8 +31,10 @@ namespace HospitalManagementSystem.Web.Controllers
                 registerUser = new RegisterUserUIModel()
             };
 
-            loginUIModel.registerUser.DesignationList = _accountRepository.GetDesignationList().Select(x => new KeyValueModel<int, string>() { key = x.Id, value = x.Designation }).ToList();
-            loginUIModel.registerUser.DepartmentList = _accountRepository.GetDepartmentList().Select(x => new KeyValueModel<int, string>() { key = x.Id, value = x.Department }).ToList();
+            loginUIModel.registerUser.DepartmentList = _accountRepository.GetDepartmentList().Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department }).ToList();
+            
+            loginUIModel.Message = TempData["RegistrationMessage"] as string;
+            loginUIModel.Status = TempData["RegistrationStatus"] as bool?;
 
             return View(loginUIModel);
         }
@@ -52,13 +54,13 @@ namespace HospitalManagementSystem.Web.Controllers
                 }
                 else
                 {
-                    loginUIModel.status = false;
+                    loginUIModel.Status = false;
                     loginUIModel.Message = returnResponse.message;
                 }
             }
             catch (Exception ex)
             {
-                loginUIModel.status = false;
+                loginUIModel.Status = false;
                 loginUIModel.Message = ex.Message;
             }
             return View("Login", loginUIModel);
@@ -68,6 +70,7 @@ namespace HospitalManagementSystem.Web.Controllers
         public IActionResult CheckUserByEmailOrPhoneNumber(ForgotPasswordUIModel forgetPasswordUIModel)
         {
             var returnResponseModel = new ForgotPasswordUIModel();
+
             try
             {
                 ModelState.Clear();
@@ -106,28 +109,43 @@ namespace HospitalManagementSystem.Web.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult RegisterUser(RegisterUserUIModel registerUser)
+        public IActionResult RegisterUser(RegisterUserUIModel registerUserUIModel)
         {
             var returnRegisterUser = new RegisterUserUIModel();
 
             try
             {
-                returnRegisterUser.DesignationList = _accountRepository.GetDesignationList().Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Designation }).ToList();
+                returnRegisterUser = _mapper.Map<RegisterUserUIModel>(registerUserUIModel);
+
                 returnRegisterUser.DepartmentList = _accountRepository.GetDepartmentList().Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department }).ToList();
+                returnRegisterUser.DesignationList = _accountRepository.GetDesignationsByDepartmentId(registerUserUIModel.DepartmentId);
+                returnRegisterUser.Password = registerUserUIModel.Password;
+                returnRegisterUser.ConfirmPassword = registerUserUIModel.ConfirmPassword;
 
-                if (ModelState.IsValid)
+                if (!string.IsNullOrEmpty(Request.Form["btnSignup"]))
                 {
-                    var registerUserInputModel = _mapper.Map<RegisterUserInputModel>(registerUser);
-                    var returnResponse = _accountRepository.RegisterUser(registerUserInputModel);
+                    if (ModelState.IsValid)
+                    {
+                        var registerUserInputModel = _mapper.Map<RegisterUserInputModel>(registerUserUIModel);
 
-                    returnRegisterUser.Status = returnResponse.status;
-                    returnRegisterUser.Message = returnResponse.message;
-                }
-                else
-                {
-                    returnRegisterUser.Status = false;
-                    returnRegisterUser.Message = "Invalid registration attempt.";
+                        registerUserInputModel.CreatedBy = 1;
+                        registerUserInputModel.CreatedOn = DateTime.Now;
+
+                        var returnResponse = _accountRepository.RegisterUser(registerUserInputModel);
+
+                        returnRegisterUser.Status = returnResponse.status;
+                        returnRegisterUser.Message = returnResponse.message;
+
+                        TempData["RegistrationMessage"] = returnResponse.message;
+                        TempData["RegistrationStatus"] = returnResponse.status;
+                    }
+                    else
+                    {
+                        returnRegisterUser.Status = false;
+                        returnRegisterUser.Message = string.Join("; ", ModelState.Values
+                                        .SelectMany(x => x.Errors)
+                                        .Select(x => x.ErrorMessage)); ;
+                    }
                 }
             }
             catch (Exception ex)
