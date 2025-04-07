@@ -1,0 +1,16 @@
+﻿using AutoMapper;
+using HospitalManagementSystem.Data.DBClasses;
+using HospitalManagementSystem.Models.InputModels;
+using HospitalManagementSystem.Models.UIModels;
+
+namespace HospitalManagementSystem.API.Helpers
+{
+    public class ObjectAutoMapper : Profile
+    {
+        public ObjectAutoMapper()
+        {
+            CreateMap<RegisterUserUIModel, RegisterUserInputModel>().ReverseMap();
+            CreateMap<RegisterUserInputModel, UserMaster>().ReverseMap();
+        }
+    }
+}
