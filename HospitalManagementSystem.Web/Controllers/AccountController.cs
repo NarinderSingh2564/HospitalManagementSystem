@@ -3,6 +3,7 @@ using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.InputModels;
 using HospitalManagementSystem.Models.UIModels;
 using HospitalManagementSystem.Repository.Abstract;
+using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -119,8 +120,6 @@ namespace HospitalManagementSystem.Web.Controllers
 
                 returnRegisterUser.DepartmentList = _accountRepository.GetDepartmentList().Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department }).ToList();
                 returnRegisterUser.DesignationList = _accountRepository.GetDesignationsByDepartmentId(registerUserUIModel.DepartmentId);
-                returnRegisterUser.Password = registerUserUIModel.Password;
-                returnRegisterUser.ConfirmPassword = registerUserUIModel.ConfirmPassword;
 
                 if (!string.IsNullOrEmpty(Request.Form["btnSignup"]))
                 {
@@ -158,5 +157,36 @@ namespace HospitalManagementSystem.Web.Controllers
             return PartialView("_SignUp", returnRegisterUser);
         }
 
+
+        //To add Patient by doctor
+        [HttpPost]
+        public IActionResult AddPatientByUser(AddPatientByUserUIModel addPatientByUserUIModel )
+        {
+            var returnAddPatientByUser = new AddPatientByUserUIModel();
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var addPatientByUserInputModel = _mapper.Map<AddPatientByUserInputModel>(addPatientByUserUIModel);
+
+                    addPatientByUserInputModel.CreatedBy = 1;
+                    addPatientByUserInputModel.CreatedOn = DateTime.Now;
+                }
+                else
+                {
+                    returnAddPatientByUser.Status = false;
+                    returnAddPatientByUser.Message = string.Join("; ", ModelState.Values
+                                    .SelectMany(x => x.Errors)
+                                    .Select(x => x.ErrorMessage));
+                }
+            }
+            catch (Exception ex)
+            {
+                returnAddPatientByUser.Status = false;
+                returnAddPatientByUser.Message = ex.Message;
+            }
+            return PartialView("_AddPatientByDoctor",returnAddPatientByUser);
+        }
     }
 }

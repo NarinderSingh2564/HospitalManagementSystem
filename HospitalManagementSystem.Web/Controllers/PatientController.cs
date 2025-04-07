@@ -24,7 +24,7 @@ namespace HospitalManagementSystem.Web.Controllers
 
             if (patientList == null)
             {
-                patientList = new List<PatientModel>(); // Initialize to an empty list if null
+                patientList = new List<PatientModel>();
             }
 
 

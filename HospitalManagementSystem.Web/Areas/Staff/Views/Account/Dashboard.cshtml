@@ -3,14 +3,15 @@
 @using Newtonsoft.Json
 @inject IHttpContextAccessor accessor
 @{
-	var userDetails = JsonConvert.DeserializeObject<UserModel>(accessor.HttpContext.Session.GetString("User"));
-	Layout = "~/Views/Shared/_Layout.cshtml";
+	 var userDetails = JsonConvert.DeserializeObject<UserModel>(accessor.HttpContext.Session.GetString("User"));
+	 Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <link href="~/theme/css/doctor-dashboard.component.css" rel="stylesheet" />
 
 <style>
 	.checked {
-		color: orange;
+	color: orange;
 	}
 </style>
 
@@ -20,7 +21,8 @@
 	</div>
 	<div class="ms-md-auto py-2 py-md-0">
 		<a href="#" class="btn btn-label-info btn-round me-2">Manage Appointments</a>
-		<a href="#" class="btn btn-primary btn-round">Add Patient</a>
+		@* <a href="#" class="btn btn-primary btn-round">Add Patient</a> *@
+		<a type="button" data-toggle="modal" class="btn btn-primary btn-round" data-target="#modalAddPatient">Add Patient</a>
 	</div>
 </div>
 
@@ -32,7 +34,7 @@
 				<img src="~/theme/img/profile.jpg" alt="" class="doctor-img">
 				<span class="user-name" />
 				Hello,<br />
-				Dr. @(userDetails.FirstName)
+				Dr.  @(userDetails.FirstName) 
 				@* </span><small>({{designation}})</small> *@
 				<br>
 				<small class="text-muted">Your today's schedule...</small><br>
