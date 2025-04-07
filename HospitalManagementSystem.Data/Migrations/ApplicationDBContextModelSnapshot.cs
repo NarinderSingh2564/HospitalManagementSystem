@@ -17,6 +17,7 @@ namespace HospitalManagementSystem.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("HMS")
                 .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -82,7 +83,7 @@ namespace HospitalManagementSystem.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AddressMasters");
+                    b.ToTable("AddressMasters", "HMS");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.DepartmentMaster", b =>
@@ -120,7 +121,7 @@ namespace HospitalManagementSystem.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DepartmentMaster");
+                    b.ToTable("DepartmentMaster", "HMS");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.DesignationMaster", b =>
@@ -163,7 +164,7 @@ namespace HospitalManagementSystem.Data.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("DesignationMaster");
+                    b.ToTable("DesignationMaster", "HMS");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.InPatientDepartmentMaster", b =>
@@ -238,7 +239,7 @@ namespace HospitalManagementSystem.Data.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("InPatientDepartmentMaster");
+                    b.ToTable("InPatientDepartmentMaster", "HMS");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.MedicineMaster", b =>
@@ -281,7 +282,7 @@ namespace HospitalManagementSystem.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MedicineMaster");
+                    b.ToTable("MedicineMaster", "HMS");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.PatientAppointmentMaster", b =>
@@ -353,7 +354,7 @@ namespace HospitalManagementSystem.Data.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("PatientAppointmentMaster");
+                    b.ToTable("PatientAppointmentMaster", "HMS");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.PatientMaster", b =>
@@ -416,11 +417,7 @@ namespace HospitalManagementSystem.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStaff")
-
-                        .HasColumnType("nvarchar(max)")
-                        .HasMaxLength(4)
-                        .HasColumnType("varchar(4)");
-
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -465,7 +462,7 @@ namespace HospitalManagementSystem.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PatientMaster");
+                    b.ToTable("PatientMaster", "HMS");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.PatientMedicalHistoryMaster", b =>
@@ -519,7 +516,7 @@ namespace HospitalManagementSystem.Data.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("PatientMedicalHistoryMaster");
+                    b.ToTable("PatientMedicalHistoryMaster", "HMS");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.PatientMedicinePrescriptionDetailMaster", b =>
@@ -589,7 +586,7 @@ namespace HospitalManagementSystem.Data.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("PatientMedicinePrescriptionDetailMaster");
+                    b.ToTable("PatientMedicinePrescriptionDetailMaster", "HMS");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.UserMaster", b =>
@@ -655,7 +652,7 @@ namespace HospitalManagementSystem.Data.Migrations
 
                     b.HasIndex("DesignationId");
 
-                    b.ToTable("UserMaster");
+                    b.ToTable("UserMaster", "HMS");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Data.DBClasses.AddressMaster", b =>
