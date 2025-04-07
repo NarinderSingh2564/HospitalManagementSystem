@@ -47,7 +47,7 @@ namespace HospitalManagementSystem.API.Controllers
         [HttpGet("CheckUserByEmailOrPhoneNumber")]
         public IActionResult CheckUserByEmailOrPhoneNumber(string username)
         {
-            var returnResponse = new ReturnResponseModel<UserModel>();
+            var returnResponse = new ReturnResponseModel<string>();
 
             try
             {

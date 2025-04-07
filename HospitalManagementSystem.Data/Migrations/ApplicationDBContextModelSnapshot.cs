@@ -417,11 +417,8 @@ namespace HospitalManagementSystem.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("IsStaff")
-                        .HasColumnType("nvarchar(max)");
-
-
                         .HasColumnType("nvarchar(max)")
-
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
