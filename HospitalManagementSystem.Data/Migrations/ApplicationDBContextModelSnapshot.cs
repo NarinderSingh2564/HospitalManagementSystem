@@ -419,6 +419,10 @@ namespace HospitalManagementSystem.Data.Migrations
                     b.Property<string>("IsStaff")
                         .HasColumnType("nvarchar(max)");
 
+
+                        .HasColumnType("nvarchar(max)")
+
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(30)

@@ -13,8 +13,8 @@
         public string ConfirmPassword { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
-        public int? UpdatedBy { get; set; } = null;
-        public DateTime? UpdatedOn { get; set; } = null;
+        public int? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
         public bool isActive { get; set; }
         public string IsStaff { get; set; } = "Yes";
     }

@@ -1,4 +1,9 @@
 ﻿@model HospitalManagementSystem.Models.UIModels.RegisterUserUIModel
+@{
+	Layout = null;
+	var message = Model.Message;
+	var status = Model.Status;
+}
 
 <div class="modal-dialog" id="dvSignUp" style="margin-top:50px" role="document">
 	<div class="modal-content">
@@ -11,18 +16,24 @@
 
 		<div class="modal-body">
 			<form asp-controller="Account" asp-action="RegisterUser" method="post" id="frmSignUp" class="form-horizontal"
-				  data-ajax="true" role="form" data-ajax-update="#dvSignUp" data-ajax-success="onSuccess">
+				  data-ajax="true" role="form" data-ajax-update="#dvSignUp" data-ajax-success="frmOnSuccess">
 
 				@if (!Model.Status && !string.IsNullOrEmpty(Model.Message))
 				{
-					<div class="alert alert-danger" id="registrationMessage">
+					<div class="alert alert-danger alert-dismissible mb-0" id="registrationMessage">
 						@Model.Message
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
 					</div>
 				}
 				else if (Model.Status && !string.IsNullOrEmpty(Model.Message))
 				{
-					<div class="alert alert-success" id="registrationMessage">
+					<div class="alert alert-success alert-dismissible mb-0" id="registrationMessage">
 						@Model.Message
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
 					</div>
 				}
 
@@ -54,7 +65,7 @@
 				<div class="form-group">
 					<label for="PhoneNumber" class="col-md-3 control-label">Phone Number</label>
 					<div class="col-md-9">
-						@Html.EditorFor(Model => Model.PhoneNumber, new { htmlAttributes = new { @class = "form-control", placeholder = "Phone Number", id = "pnDIv" } })
+						@Html.EditorFor(Model => Model.PhoneNumber, new { htmlAttributes = new { @class = "form-control", placeholder = "Phone Number" } })
 						@Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
 
 					</div>
@@ -69,29 +80,21 @@
 							<option value="false">No</option>
 						</select>
 						@Html.ValidationMessageFor(model => model.IsDoctor, "", new { @class = "text-danger" })
-
 					</div>
 				</div>
 
 				<div class="form-group" id="departmentGroup">
 					<label for="DepartmentId" class="col-md-3 control-label">Department</label>
 					<div class="col-md-9">
-						@if (Model?.DepartmentList != null)
-						{
-							@Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.DepartmentList, "key", "value"), "Select Department", new { @class = "form-control", required = "required" })
-						}
+						@Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.DepartmentList, "key", "value", Model.DepartmentId), "Select Department", new { @class = "form-control" })
 						@Html.ValidationMessageFor(model => model.DepartmentList, "", new { @class = "text-danger" })
-
 					</div>
 				</div>
 
 				<div class="form-group" id="designationGroup">
 					<label for="designation" class="col-md-3 control-label">Designation</label>
 					<div class="col-md-9">
-						@if (Model?.DesignationList != null)
-						{
-							@Html.DropDownListFor(model => model.DesignationId, new SelectList(Model.DesignationList, "key", "value"), "Select Designation", new { @class = "form-control", required = "required" })
-						}
+						@Html.DropDownListFor(model => model.DesignationId, new SelectList(Model.DesignationList, "key", "value", Model.DesignationId), "Select Designation", new { @class = "form-control" })
 						@Html.ValidationMessageFor(model => model.DesignationList, "", new { @class = "text-danger" })
 
 					</div>
@@ -100,7 +103,7 @@
 				<div class="form-group">
 					<label for="Password" class="col-md-3 control-label">Password</label>
 					<div class="col-md-9">
-						@Html.EditorFor(Model => Model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password", type = "password", id = "PasswordSignUp" } })
+						@Html.EditorFor(Model => Model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password", type = "password" } })
 						@Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
 
 					</div>
@@ -109,28 +112,17 @@
 				<div class="form-group">
 					<label for="ConfirmPassword" class="col-md-3 control-label">Confirm Password</label>
 					<div class="col-md-9">
-						@Html.EditorFor(Model => Model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", placeholder = "Confirm Password", type = "password", id = "ConfirmPasswordSignUp" } })
+						@Html.EditorFor(Model => Model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", placeholder = "Confirm Password", type = "password" } })
 						@Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
 
 					</div>
 				</div>
-
 				<div class="form-group">
 					<div class="col-md-offset-3 col-md-9">
 						<button type="submit" name="btnSignup" id="btnSignup" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp Sign Up</button>
 						<button type="button" class="btn btn-secondary" id="cancelButton" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
-
-				<div class="form-group">
-					<div class="col-md-12 control">
-						<div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
-							Already have an account!
-							<a href="#" onClick="$('#signupbox').hide(); $('#loginbox').show()">Sign In Here</a>
-						</div>
-					</div>
-				</div>
-
 			</form>
 		</div>
 	</div>
@@ -138,42 +130,47 @@
 
 <script type="text/javascript">
 
-	function onSuccess(formData) {
-		console.log(formData);
-		$(".text-danger").show();
+	$.validator.unobtrusive.parse("#frmSignUp");
+
+		$("#DepartmentId").on("change", function() {
+			$("#frmSignUp").validate().destroy();
+			$("#frmSignUp").append("<input type='hidden' name='ddlDepartmentChange' value='"+$(this).val()+"' id='ddlDepartmentChange'/>")
+			$("#frmSignUp").submit();
+		});
+
+	function frmOnSuccess() {
+			if('@Model.Status' == 'True' )
+			 {
+				$('#modalSignUp').modal('toggle');
+				window.location = "/Account/Login";
+			}
 	}
 
+
+
 	function resetFormAndClearMessages() {
+		$(".text-danger").hide();
 		$("#frmSignUp")[0].reset();
 		$("#registrationMessage").text("").hide('alert-info alert-danger alert-success');
 	}
 
 	$("#dvSignUp .close").on("click", function () {
-		resetFormAndClearMessages();
 		$("#frmSignUp")[0].reset();
-		$("#registrationMessage").text("").hide();
-		$(".text-danger").hide();
+		resetFormAndClearMessages();
 	});
 
 	$("#cancelButton").on("click", function () {
-		resetFormAndClearMessages();
 		$("#frmSignUp")[0].reset();
-		$("#registrationMessage").text("").hide();
-		$(".text-danger").hide();
+		resetFormAndClearMessages();
 	});
 
-	$('#dvSignUp').on('hidden.bs.modal', function () {
+	$('#modalSignUp').on('hidden.bs.modal', function () {
 		resetFormAndClearMessages();
-		$("#frmSignUp")[0].reset();
-		$("#registrationMessage").text("").hide();
-		$(".text-danger").hide();
 	});
 
 	$("#btnSignup").on("click", function () {
-			$(".text-danger").show();
+		$(".text-danger").show();
+		$("#btnSignup").val("true");
 	});
 
-</script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-
-		
+</script> 

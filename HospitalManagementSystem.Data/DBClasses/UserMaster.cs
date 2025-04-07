@@ -41,11 +41,11 @@ namespace HospitalManagementSystem.Data.DBClasses
         public DateTime CreatedOn { get; set; }
         public int? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public bool isActive { get; set; }
 
         [Required]
         [StringLength(4)]
         [Column(TypeName = "varchar(4)")]
         public string IsStaff { get; set; }
-        public bool isActive { get; set; }
     }
 }

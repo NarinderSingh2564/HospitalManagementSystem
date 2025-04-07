@@ -1,11 +1,10 @@
-﻿using AutoMapper;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using AutoMapper;
 using HospitalManagementSystem.Data;
 using HospitalManagementSystem.Data.DBClasses;
 using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.InputModels;
 using HospitalManagementSystem.Models.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace HospitalManagementSystem.Service.Interactions
 {
@@ -62,70 +61,73 @@ namespace HospitalManagementSystem.Service.Interactions
             {
                 returnResponseModel.status = false;
                 returnResponseModel.message = "Email and Password are required.";
-                return returnResponseModel;
-            }
-
-            dynamic dbUserMasterObj = _dbcontext.UserMaster.Where(u => u.Email == email).FirstOrDefault();
-
-            if (dbUserMasterObj != null)
-            {
-                if (dbUserMasterObj.Password != password)
-                {
-                    returnResponseModel.status = false;
-                    returnResponseModel.message = "Wrong Password.";
-                }
-                else if (!dbUserMasterObj.isActive)
-                {
-                    returnResponseModel.status = false;
-                    returnResponseModel.message = "User is not active";
-                }
-                else
-                {
-                    returnResponseModel.Data = new UserModel
-                    {
-                        FirstName = string.Concat(dbUserMasterObj.FirstName, " ", dbUserMasterObj.LastName),
-                        IsStaff = dbUserMasterObj?.IsStaff != null ? dbUserMasterObj.IsStaff : null,
-                        Area = dbUserMasterObj.IsStaff != null ? "Staff" : "Patient",
-                    };
-                    returnResponseModel.status = true;
-                }
             }
             else
             {
-                returnResponseModel.status = false;
-                returnResponseModel.message = "Wrong Email";
+                dynamic dbUserMasterObj = _dbcontext.UserMaster.Where(u => u.Email == email).FirstOrDefault();
+
+                if (dbUserMasterObj != null)
+                {
+                    if (dbUserMasterObj.Password != password)
+                    {
+                        returnResponseModel.status = false;
+                        returnResponseModel.message = "Wrong Password.";
+                    }
+                    else if (!dbUserMasterObj.isActive)
+                    {
+                        returnResponseModel.status = false;
+                        returnResponseModel.message = "User is not active";
+                    }
+                    else
+                    {
+                        returnResponseModel.Data = new UserModel
+                        {
+                            FirstName = string.Concat(dbUserMasterObj.FirstName, " ", dbUserMasterObj.LastName),
+                            IsStaff = dbUserMasterObj?.IsStaff != null ? dbUserMasterObj.IsStaff : null,
+                            Area = dbUserMasterObj.IsStaff != null ? "Staff" : "Patient",
+                        };
+                        returnResponseModel.status = true;
+                    }
+                }
+                else
+                {
+                    returnResponseModel.status = false;
+                    returnResponseModel.message = "Wrong Email";
+                }
             }
+
             return returnResponseModel;
         }
 
-        public ReturnResponseModel<UserModel> CheckUserByEmailOrPhoneNumber(string emailphonenumber)
+        public ReturnResponseModel<string> CheckUserByEmailOrPhoneNumber(string emailphonenumber)
         {
-            var returnResponseModel = new ReturnResponseModel<UserModel>();
+            var returnResponseModel = new ReturnResponseModel<string>();
 
             if (string.IsNullOrEmpty(emailphonenumber))
             {
                 returnResponseModel.status = false;
                 returnResponseModel.message = "Email or phone number is required.";
-                return returnResponseModel;
-            }
-
-            var dbUserEmailObj = _dbcontext.UserMaster.Where(u => u.Email == emailphonenumber).FirstOrDefault();
-            var dbUserPhoneNumberObj = _dbcontext.UserMaster.Where(u => u.PhoneNumber == emailphonenumber).FirstOrDefault();
-
-            if (dbUserEmailObj != null)
-            {
-                returnResponseModel.status = true;
-                returnResponseModel.message = "The email exists. You can change your password now.";
-            }
-            else if (dbUserPhoneNumberObj != null)
-            {
-                returnResponseModel.status = true;
-                returnResponseModel.message = "The phone number exists. You can change your password now.";
             }
             else
             {
-                returnResponseModel.status = false;
-                returnResponseModel.message = "No user found with the provided data.";
+                var dbUserEmailObj = _dbcontext.UserMaster.Where(u => u.Email == emailphonenumber).FirstOrDefault();
+                var dbUserPhoneNumberObj = _dbcontext.UserMaster.Where(u => u.PhoneNumber == emailphonenumber).FirstOrDefault();
+
+                if (dbUserEmailObj != null)
+                {
+                    returnResponseModel.status = true;
+                    returnResponseModel.message = "The email exists. You can change your password now.";
+                }
+                else if (dbUserPhoneNumberObj != null)
+                {
+                    returnResponseModel.status = true;
+                    returnResponseModel.message = "The phone number exists. You can change your password now.";
+                }
+                else
+                {
+                    returnResponseModel.status = false;
+                    returnResponseModel.message = "No user found with the provided data.";
+                }
             }
             return returnResponseModel;
         }
@@ -138,47 +140,44 @@ namespace HospitalManagementSystem.Service.Interactions
             {
                 returnResponseModel.status = false;
                 returnResponseModel.message = "Email/Phone number is required.";
-                return returnResponseModel;
             }
             else if (string.IsNullOrEmpty(newPassword))
             {
                 returnResponseModel.status = false;
                 returnResponseModel.message = "New password is required.";
-                return returnResponseModel;
             }
             else if (string.IsNullOrEmpty(confirmPassword))
             {
                 returnResponseModel.status = false;
                 returnResponseModel.message = "Confirm password is required.";
-                return returnResponseModel;
             }
-
-            if (newPassword != confirmPassword)
+            else if (newPassword != confirmPassword)
             {
                 returnResponseModel.status = false;
                 returnResponseModel.message = "New password and confirm password do not match. Please try again!";
-                return returnResponseModel;
-            }
-
-            var dbUserObj = _dbcontext.UserMaster.Where(u => u.Email == emailphonenumber || u.PhoneNumber == emailphonenumber).FirstOrDefault();
-
-            if (dbUserObj == null)
-            {
-                returnResponseModel.status = false;
-                returnResponseModel.message = "No user found with the provided data. Please try again!";
-            }
-            else if (dbUserObj.Password == newPassword)
-            {
-                returnResponseModel.status = false;
-                returnResponseModel.message = "New password cannot be the same as the old password.";
             }
             else
             {
-                dbUserObj.Password = newPassword;
-                _dbcontext.SaveChanges();
+                var dbUserObj = _dbcontext.UserMaster.Where(u => u.Email == emailphonenumber || u.PhoneNumber == emailphonenumber).FirstOrDefault();
 
-                returnResponseModel.status = true;
-                returnResponseModel.message = "Password updated successfully. Please Login!";
+                if (dbUserObj == null)
+                {
+                    returnResponseModel.status = false;
+                    returnResponseModel.message = "No user found with the provided data. Please try again!";
+                }
+                else if (dbUserObj.Password == newPassword)
+                {
+                    returnResponseModel.status = false;
+                    returnResponseModel.message = "New password cannot be the same as the old password.";
+                }
+                else
+                {
+                    dbUserObj.Password = newPassword;
+                    _dbcontext.SaveChanges();
+
+                    returnResponseModel.status = true;
+                    returnResponseModel.message = "Password updated successfully. Please Login!";
+                }
             }
             return returnResponseModel;
         }
@@ -203,60 +202,76 @@ namespace HospitalManagementSystem.Service.Interactions
                     returnResponseModel.message = "Phone number already exists. Please Login...";
                     returnResponseModel.status = false;
                 }
+                else if (registerUserInputModel.Password != registerUserInputModel.ConfirmPassword)
+                {
+                    returnResponseModel.message = "Password and Confirm Password do not match. Please try again.";
+                    returnResponseModel.status = false;
+                }
                 else
                 {
-                    if (registerUserInputModel.Password != registerUserInputModel.ConfirmPassword)
-                    {
-                        returnResponseModel.message = "Password and Confirm Password do not match. Please try again.";
-                        returnResponseModel.status = false;
-                    }
-                    else
-                    {
-                        var userMaster = _mapper.Map<UserMaster>(registerUserInputModel);
-                        userMaster.CreatedBy = 1;
-                        userMaster.CreatedOn = DateTime.UtcNow;
+                    var userMaster = _mapper.Map<UserMaster>(registerUserInputModel);
 
-                        _dbcontext.UserMaster.Add(userMaster);
-                        _dbcontext.SaveChanges();
-                    }
+                    _dbcontext.UserMaster.Add(userMaster);
+                    _dbcontext.SaveChanges();
+
                     returnResponseModel.message = "Registration successful! Please Login...";
                     returnResponseModel.status = true;
+
                 }
             }
             return returnResponseModel;
         }
 
-        public List<DesignationModel> GetDesignationList()
-        {
-            var designationList = new List<DesignationModel>();
-            var dbDesignationList = _dbcontext.DesignationMaster.Include(d => d.DepartmentMaster)
-            .Where(d => d.DepartmentId == d.DepartmentMaster.Id).Distinct().ToList();
-
-            foreach (var item in dbDesignationList)
-            {
-                designationList.Add(new DesignationModel
-                {
-                    Id = item.Id,
-                    Department = item.DepartmentMaster.DepartmentName + " ( " + item.DepartmentMaster.DepartmentCode + " )",
-                    Designation = item.DesignationName + " ( " + item.DesignationCode + " )"
-                });
-            }
-            return designationList;
-        }
-
         public List<DepartmentModel> GetDepartmentList()
         {
-            var designationList = new List<DepartmentModel>();
-            var dbDesignationList = _dbcontext.DepartmentMaster.Distinct().ToList();
+            var departmentList = new List<DepartmentModel>();
+            var dbDepartmentList = _dbcontext.DepartmentMaster.OrderBy(d => d.DepartmentName).Distinct().ToList();
 
-            foreach (var item in dbDesignationList)
+            foreach (var item in dbDepartmentList)
             {
-                designationList.Add(new DepartmentModel
+                departmentList.Add(new DepartmentModel
                 {
                     Id = item.Id,
                     Department = item.DepartmentName + " ( " + item.DepartmentCode + " )"
                 });
             }
+            return departmentList;
+        }
+
+        //public List<DesignationModel> GetDesignationList()
+        //{
+        //    var designationList = new List<DesignationModel>();
+        //    var dbDesignationList = _dbcontext.DesignationMaster.OrderBy(d=>d.DesignationName).ToList();
+
+        //    foreach (var item in dbDesignationList)
+        //    {
+        //        designationList.Add(new DesignationModel
+        //        {
+        //            Id = item.Id,
+        //            Designation = item.DesignationName + " ( " + item.DesignationCode + " )"
+        //        });
+        //    }
+        //    return designationList;
+        //}
+
+        public List<KeyValueModel<int, string>> GetDesignationsByDepartmentId(int departmentId)
+        {
+            var designationList = new List<KeyValueModel<int, string>>();
+
+            var dbDesignationListByDepartmentId = _dbcontext.DesignationMaster
+                                                .Where(d => d.DepartmentId == departmentId)
+                                                .OrderBy(d => d.DesignationName)
+                                                .ToList();
+
+            foreach (var item in dbDesignationListByDepartmentId)
+            {
+                designationList.Add(new KeyValueModel<int, string>
+                {
+                    key = item.Id,
+                    value = item.DesignationName + " (" + item.DesignationCode + ")"
+                });
+            }
+
             return designationList;
         }
     }
