@@ -42,6 +42,7 @@
   <ItemGroup>
     <Folder Include="Areas\Patient\Data\" />
     <Folder Include="Areas\Patient\Models\" />
+    <Folder Include="Views\Patient\" />
   </ItemGroup>
 
 </Project>

@@ -72,8 +72,8 @@
 				<div class="form-group" id="IsDoctor">
 					<label for="IsDoctor" class="col-md-3 control-label">Doctor</label>
 					<div class="col-md-9">
-						<select asp-for="IsDoctor" class="form-control" required>
-							<option value="" selected>Select</option>
+						<select asp-for="IsDoctor" class="form-control">
+							<option value="">Select</option>
 							<option value="true">Yes</option>
 							<option value="false">No</option>
 						</select>
@@ -85,7 +85,7 @@
 					<label for="DepartmentId" class="col-md-3 control-label">Department</label>
 					<div class="col-md-9">
 						@Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.DepartmentList, "key", "value", Model.DepartmentId), "Select Department", new { @class = "form-control" })
-						@Html.ValidationMessageFor(model => model.DepartmentList, "", new { @class = "text-danger" })
+						@Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })
 					</div>
 				</div>
 
@@ -93,7 +93,7 @@
 					<label for="designation" class="col-md-3 control-label">Designation</label>
 					<div class="col-md-9">
 						@Html.DropDownListFor(model => model.DesignationId, new SelectList(Model.DesignationList, "key", "value", Model.DesignationId), "Select Designation", new { @class = "form-control" })
-						@Html.ValidationMessageFor(model => model.DesignationList, "", new { @class = "text-danger" })
+						@Html.ValidationMessageFor(model => model.DesignationId, "", new { @class = "text-danger" })
 
 					</div>
 				</div>

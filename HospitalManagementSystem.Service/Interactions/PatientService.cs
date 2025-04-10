@@ -51,21 +51,21 @@ namespace HospitalManagementSystem.Service.Interactions
         }
         #endregion
 
-        public List<PatientModel> GetPatientList()
-        {
-            var patientList = new List<PatientModel>();
-            var dbPatientList = _dbcontext.PatientMaster.ToList();
+        //public List<PatientModel> GetPatientList()
+        //{
+        //    var patientList = new List<PatientModel>();
+        //    var dbPatientList = _dbcontext.PatientMaster.ToList();
 
-            foreach (var item in dbPatientList)
-            {
-                patientList.Add(new PatientModel
-                {
-                    Id = item.Id,
-                    FirstName = item.FirstName + " "+item.LastName,
-                });
-            }
+        //    foreach (var item in dbPatientList)
+        //    {
+        //        patientList.Add(new PatientModel
+        //        {
+        //            Id = item.Id,
+        //            FirstName = item.FirstName + " "+item.LastName,
+        //        });
+        //    }
 
-            return patientList;
-        }
+        //    return patientList;
+        //}
     }
 }

@@ -5,6 +5,7 @@ using HospitalManagementSystem.Data.DBClasses;
 using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.InputModels;
 using HospitalManagementSystem.Models.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HospitalManagementSystem.Service.Interactions
 {
@@ -99,19 +100,19 @@ namespace HospitalManagementSystem.Service.Interactions
             return returnResponseModel;
         }
 
-        public ReturnResponseModel<string> CheckUserByEmailOrPhoneNumber(string emailphonenumber)
+        public ReturnResponseModel<string> CheckUserByEmailOrPhoneNumber(string userName)
         {
             var returnResponseModel = new ReturnResponseModel<string>();
 
-            if (string.IsNullOrEmpty(emailphonenumber))
+            if (string.IsNullOrEmpty(userName))
             {
                 returnResponseModel.status = false;
                 returnResponseModel.message = "Email or phone number is required.";
             }
             else
             {
-                var dbUserEmailObj = _dbcontext.UserMaster.Where(u => u.Email == emailphonenumber).FirstOrDefault();
-                var dbUserPhoneNumberObj = _dbcontext.UserMaster.Where(u => u.PhoneNumber == emailphonenumber).FirstOrDefault();
+                var dbUserEmailObj = _dbcontext.UserMaster.Where(u => u.Email == userName).FirstOrDefault();
+                var dbUserPhoneNumberObj = _dbcontext.UserMaster.Where(u => u.PhoneNumber == userName).FirstOrDefault();
 
                 if (dbUserEmailObj != null)
                 {
@@ -132,11 +133,11 @@ namespace HospitalManagementSystem.Service.Interactions
             return returnResponseModel;
         }
 
-        public ReturnResponseModel<UserModel> UpdatePassword(string emailphonenumber, string newPassword, string confirmPassword)
+        public ReturnResponseModel<UserModel> UpdatePassword(string userName, string newPassword, string confirmPassword)
         {
             var returnResponseModel = new ReturnResponseModel<UserModel>();
 
-            if (string.IsNullOrEmpty(emailphonenumber))
+            if (string.IsNullOrEmpty(userName))
             {
                 returnResponseModel.status = false;
                 returnResponseModel.message = "Email/Phone number is required.";
@@ -158,7 +159,7 @@ namespace HospitalManagementSystem.Service.Interactions
             }
             else
             {
-                var dbUserObj = _dbcontext.UserMaster.Where(u => u.Email == emailphonenumber || u.PhoneNumber == emailphonenumber).FirstOrDefault();
+                var dbUserObj = _dbcontext.UserMaster.Where(u => u.Email == userName || u.PhoneNumber == userName).FirstOrDefault();
 
                 if (dbUserObj == null)
                 {
@@ -273,6 +274,95 @@ namespace HospitalManagementSystem.Service.Interactions
             }
 
             return designationList;
+        }
+
+        public List<PatientModel> GetPatientList()
+        {
+            //var patientList = new List<PatientModel>();
+            var dbPatientList = _dbcontext.PatientMaster.ToList();
+
+            //foreach (var item in dbPatientList)
+            //{
+            //    patientList.Add(new PatientModel
+            //    {
+            //        Id = item.Id,
+            //        FirstName = item.FirstName,
+            //        LastName = item.LastName,
+            //        Email = item.Email,
+            //        Password = item.Password,
+            //        MaritalStatus = item.MaritalStatus,
+            //        FatherName = item.FatherName,
+            //        MotherName = item.MotherName,
+            //        SpouseName = item.SpouseName,
+            //        DOB = item.DOB,
+            //        BloodGroup = item.BloodGroup,
+            //        PhoneNumber = item.PhoneNumber,
+            //        EmergencyPhoneNumber = item.EmergencyPhoneNumber,
+            //        Gender = item.Gender,
+            //        AdmissionDate = item.AdmissionDate,
+            //        MedicalHistory = item.MedicalHistory,
+            //        IsInsured = item.IsInsured,
+            //        InsuranceCompany = item.InsuranceCompany,
+            //        InsuranceNumber = item.InsuranceNumber,
+            //        //isActive = item.isActive,
+            //        IsStaff = item.IsStaff
+            //    });
+            //}
+            var patientList = _mapper.Map<List<PatientModel>>(dbPatientList);
+
+            return patientList;
+        }
+
+        public ReturnResponseModel<string> AddPatientAppointmentByUser(AddPatientAppointmentByUserInputModel addPatientAppointmentByUserInputModel)
+        {
+            var returnResponseModel = new ReturnResponseModel<string>();
+            var dbPatientEntityByEmail = _dbcontext.PatientMaster.Where(u => u.Email == addPatientAppointmentByUserInputModel.Email).FirstOrDefault();
+            
+            if (dbPatientEntityByEmail != null)
+            {
+                returnResponseModel.message = "Patient already exists. Please enter Email...";
+                returnResponseModel.status = false;
+            }
+            else
+            {
+                var dbPatientEntityByPhoneNumber = _dbcontext.PatientMaster.Where(u => u.PhoneNumber == addPatientAppointmentByUserInputModel.PhoneNumber).FirstOrDefault();
+                
+                if (dbPatientEntityByPhoneNumber != null)
+                {
+                    returnResponseModel.message = "Phone number already exists. Please Login...";
+                    returnResponseModel.status = false;
+                }
+                else
+                {
+                    var patientMaster = _mapper.Map<PatientMaster>(addPatientAppointmentByUserInputModel);
+                   
+                    _dbcontext.PatientMaster.Add(patientMaster);
+                    _dbcontext.SaveChanges();
+                    
+                    returnResponseModel.message = "Patient added successfully!!! ";
+                    returnResponseModel.status = true;
+                }
+            }
+            return returnResponseModel;
+        }
+
+        public List<UserModel> GetDoctorList()
+        {
+            var doctorList = new List<UserModel>();
+            var dbDoctorList = _dbcontext.UserMaster.Include(u => u.DesignationMaster).OrderBy(d => d.FirstName).Distinct().ToList();
+
+            foreach (var item in dbDoctorList)
+            {
+                doctorList.Add(new UserModel
+                {
+                    Id = item.Id,
+                    FirstName = item.FirstName +""+ item.LastName,
+                    IsDoctor = item.IsDoctor,
+                    Designation = item.DesignationMaster.DesignationName + " ( " + item.DesignationMaster.DesignationCode + " )",
+                    
+                });
+            }
+            return doctorList;
         }
     }
 }

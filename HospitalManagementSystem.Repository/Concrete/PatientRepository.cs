@@ -17,12 +17,12 @@ namespace HospitalManagementSystem.Repository.Concrete
             _mapper = mapper;
         }
 
-        public List<PatientModel> GetPatientList()
-        {
-            using (PatientService patientService = new PatientService(_dBContext, _mapper))
-            {
-                return patientService.GetPatientList();
-            }
-        }
+        //public List<PatientModel> GetPatientList()
+        //{
+        //    using (PatientService patientService = new PatientService(_dBContext, _mapper))
+        //    {
+        //        return patientService.GetPatientList();
+        //    }
+        //}
     }
 }

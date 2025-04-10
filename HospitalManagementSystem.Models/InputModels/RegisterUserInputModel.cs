@@ -19,7 +19,7 @@
         public string IsStaff { get; set; } = "Yes";
     }
 
-    public class AddPatientByUserInputModel
+    public class AddPatientAppointmentByUserInputModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

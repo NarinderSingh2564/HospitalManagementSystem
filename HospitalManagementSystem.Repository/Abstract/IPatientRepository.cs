@@ -5,6 +5,6 @@ namespace HospitalManagementSystem.Repository.Abstract
 {
     public interface IPatientRepository
     {
-        List<PatientModel> GetPatientList();
+        //List<PatientModel> GetPatientList();
     }
 }

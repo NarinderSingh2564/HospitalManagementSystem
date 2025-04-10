@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.InputModels;
+using HospitalManagementSystem.Models.Models;
 using HospitalManagementSystem.Models.UIModels;
 using HospitalManagementSystem.Repository.Abstract;
-using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -27,13 +27,13 @@ namespace HospitalManagementSystem.Web.Controllers
         {
             var loginUIModel = new LoginUIModel
             {
-                Email = "rohan@gmail.com",
-                Password = "abc123",
+                Email = "abc@gmail.com",
+                Password = "asdasd",
                 registerUser = new RegisterUserUIModel()
             };
 
             loginUIModel.registerUser.DepartmentList = _accountRepository.GetDepartmentList().Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department }).ToList();
-            
+
             loginUIModel.Message = TempData["RegistrationMessage"] as string;
             loginUIModel.Status = TempData["RegistrationStatus"] as bool?;
 
@@ -78,17 +78,17 @@ namespace HospitalManagementSystem.Web.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    var returnResponse = _accountRepository.CheckUserByEmailOrPhoneNumber(forgetPasswordUIModel.EmailPhoneNumber);
+                    var returnResponse = _accountRepository.CheckUserByEmailOrPhoneNumber(forgetPasswordUIModel.UserName);
                     returnResponseModel.Status = returnResponse.status;
                     returnResponseModel.Message = returnResponse.message;
 
                     if (returnResponse.status)
                     {
-                        returnResponseModel.EmailPhoneNumber = forgetPasswordUIModel.EmailPhoneNumber;
+                        returnResponseModel.UserName = forgetPasswordUIModel.UserName;
 
                         if (!string.IsNullOrEmpty(forgetPasswordUIModel.NewPassword) && !string.IsNullOrEmpty(forgetPasswordUIModel.ConfirmPassword))
                         {
-                            var updatePasswordResponse = _accountRepository.UpdatePassword(forgetPasswordUIModel.EmailPhoneNumber, forgetPasswordUIModel.NewPassword, forgetPasswordUIModel.ConfirmPassword);
+                            var updatePasswordResponse = _accountRepository.UpdatePassword(forgetPasswordUIModel.UserName, forgetPasswordUIModel.NewPassword, forgetPasswordUIModel.ConfirmPassword);
                             returnResponseModel.Status = updatePasswordResponse.status;
                             returnResponseModel.Message = updatePasswordResponse.message;
                         }
@@ -157,36 +157,64 @@ namespace HospitalManagementSystem.Web.Controllers
             return PartialView("_SignUp", returnRegisterUser);
         }
 
-
-        //To add Patient by doctor
-        [HttpPost]
-        public IActionResult AddPatientByUser(AddPatientByUserUIModel addPatientByUserUIModel )
+        public IActionResult GetPatientList()
         {
-            var returnAddPatientByUser = new AddPatientByUserUIModel();
+            //var patientList = _accountRepository.GetPatientList();
+            List<PatientModel> patients = _accountRepository.GetPatientList();
 
+            //List<AddPatientByUserUIModel> patientUIModels = patients.Select(patient => new AddPatientByUserUIModel
+            //{
+            //    FirstName = patient.FirstName,
+            //    Email = patient.Email
+            //}).ToList();
+
+            return PartialView("PatientList", patients);
+        }
+
+
+        public IActionResult AddPatientAppointmentByUser()
+        {
+            var addPatientAppointmentByUser = new AddPatientAppointmentByUserUIModel();
+            addPatientAppointmentByUser.DepartmentList = _accountRepository.GetDepartmentList().Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department }).ToList();
+            addPatientAppointmentByUser.DoctorList = _accountRepository.GetDoctorList().Where(x => x.IsDoctor == true).Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.FirstName + " " + x.LastName }).ToList();
+            return View("AddPatientForm", addPatientAppointmentByUser);
+        }
+
+        [HttpPost]
+        public IActionResult AddPatientAppointmentByUser(AddPatientAppointmentByUserUIModel addPatientAppointmentByUserUIModel)
+        {
+            var returnAddPatientAppointmentByUser = new AddPatientAppointmentByUserUIModel();
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var addPatientByUserInputModel = _mapper.Map<AddPatientByUserInputModel>(addPatientByUserUIModel);
+                    var addPatientAppointmentByUserInputModel = _mapper.Map<AddPatientAppointmentByUserInputModel>(addPatientAppointmentByUserUIModel);
 
-                    addPatientByUserInputModel.CreatedBy = 1;
-                    addPatientByUserInputModel.CreatedOn = DateTime.Now;
+                    addPatientAppointmentByUserInputModel.CreatedBy = 1;
+                    addPatientAppointmentByUserInputModel.CreatedOn = DateTime.Now;
+
+                    var returnResponse = _accountRepository.AddPatientAppointmentByUser(addPatientAppointmentByUserInputModel);
+
+                    returnAddPatientAppointmentByUser.Status = returnResponse.status;
+                    returnAddPatientAppointmentByUser.Message = returnResponse.message;
+
                 }
                 else
                 {
-                    returnAddPatientByUser.Status = false;
-                    returnAddPatientByUser.Message = string.Join("; ", ModelState.Values
+                    returnAddPatientAppointmentByUser.Status = false;
+                    returnAddPatientAppointmentByUser.Message = string.Join("; ", ModelState.Values
                                     .SelectMany(x => x.Errors)
                                     .Select(x => x.ErrorMessage));
                 }
             }
             catch (Exception ex)
             {
-                returnAddPatientByUser.Status = false;
-                returnAddPatientByUser.Message = ex.Message;
+                returnAddPatientAppointmentByUser.Status = false;
+                returnAddPatientAppointmentByUser.Message = ex.Message;
             }
-            return PartialView("_AddPatientByDoctor",returnAddPatientByUser);
+            
+            ModelState.Clear();
+            return View("AddPatientForm", returnAddPatientAppointmentByUser);
         }
     }
 }

@@ -3,15 +3,16 @@
 @using Newtonsoft.Json
 @inject IHttpContextAccessor accessor
 @{
-	 var userDetails = JsonConvert.DeserializeObject<UserModel>(accessor.HttpContext.Session.GetString("User"));
-	 Layout = "~/Views/Shared/_Layout.cshtml";
+	var userDetails = JsonConvert.DeserializeObject<UserModel>(accessor.HttpContext.Session.GetString("User"));
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <link href="~/theme/css/doctor-dashboard.component.css" rel="stylesheet" />
 
 <style>
+
 	.checked {
-	color: orange;
+		color: orange;
 	}
 </style>
 
@@ -21,8 +22,8 @@
 	</div>
 	<div class="ms-md-auto py-2 py-md-0">
 		<a href="#" class="btn btn-label-info btn-round me-2">Manage Appointments</a>
-		@* <a href="#" class="btn btn-primary btn-round">Add Patient</a> *@
-		<a type="button" data-toggle="modal" class="btn btn-primary btn-round" data-target="#modalAddPatient">Add Patient</a>
+		<a href="#" class="btn btn-primary btn-round">Add Patient</a>
+		@* <button type="button" data-toggle="modal" class="btn btn-primary btn-round" data-target="#exampleModal">Add Patient</button> *@
 	</div>
 </div>
 
@@ -34,7 +35,7 @@
 				<img src="~/theme/img/profile.jpg" alt="" class="doctor-img">
 				<span class="user-name" />
 				Hello,<br />
-				Dr.  @(userDetails.FirstName) 
+				Dr.  @(userDetails.FirstName)
 				@* </span><small>({{designation}})</small> *@
 				<br>
 				<small class="text-muted">Your today's schedule...</small><br>
@@ -97,7 +98,7 @@
 							</div>
 						</div>
 					</div>
-						<p class="text-primary" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+20%</p>
+					<p class="text-primary" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+20%</p>
 				</div>
 			</button>
 		</div>
@@ -120,7 +121,7 @@
 							</div>
 						</div>
 					</div>
-						<p class="text-info d-flex flex-row-reverse" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+20%</p>
+					<p class="text-info d-flex flex-row-reverse" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+20%</p>
 				</div>
 			</button>
 		</div>
@@ -143,7 +144,7 @@
 							</div>
 						</div>
 					</div>
-						<p class="text-danger" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+30%</p>
+					<p class="text-danger" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+30%</p>
 				</div>
 			</button>
 		</div>
@@ -166,7 +167,7 @@
 							</div>
 						</div>
 					</div>
-						<p class="text-success" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+30%</p>
+					<p class="text-success" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+30%</p>
 				</div>
 			</button>
 		</div>
@@ -212,7 +213,7 @@
 							</div>
 						</div>
 					</div>
-						<p class="text-warning" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+40%</p>
+					<p class="text-warning" style="position: absolute; bottom: 10px; right: 10px; text-align: right; font-size: 12px; display: inline-block;">+40%</p>
 				</div>
 			</button>
 		</div>
@@ -245,7 +246,6 @@
 <div class="row">
 
 	<!-- Upcoming Patients section -->
-
 	<div class="col-md-4">
 		<div class="card card-round">
 			<div class="card-body">

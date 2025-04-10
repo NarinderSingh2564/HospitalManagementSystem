@@ -16,12 +16,12 @@
         public string PhoneNumber { get; set; }
         public string EmergencyPhoneNumber { get; set; }
         public string Gender { get; set; }
-        public DateTime AdmissionDate { get; set; }
+        public DateTime AdmissionDate { get; set; } 
         public bool MedicalHistory { get; set; }
         public bool IsInsured { get; set; }
         public string InsuranceCompany { get; set; }
         public string InsuranceNumber { get; set; }
-        public bool isActive { get; set; }
+        public string isActive { get; set; }
         public string IsStaff { get; set; }
 
 

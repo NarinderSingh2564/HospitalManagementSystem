@@ -25,11 +25,11 @@ namespace HospitalManagementSystem.Repository.Concrete
             }
         }
 
-        public ReturnResponseModel<string> CheckUserByEmailOrPhoneNumber(string emailphonenumber)
+        public ReturnResponseModel<string> CheckUserByEmailOrPhoneNumber(string userName)
         {
             using (AccountService accountService = new AccountService(_dBContext, _mapper))
             {
-                return accountService.CheckUserByEmailOrPhoneNumber(emailphonenumber);
+                return accountService.CheckUserByEmailOrPhoneNumber(userName);
             }
         }
 
@@ -65,11 +65,35 @@ namespace HospitalManagementSystem.Repository.Concrete
             }
         }
 
-        public ReturnResponseModel<UserModel> UpdatePassword(string emailphonenumber, string newPassword, string confirmPassword)
+        public ReturnResponseModel<UserModel> UpdatePassword(string userName, string newPassword, string confirmPassword)
         {
             using (AccountService accountService = new AccountService(_dBContext, _mapper))
             {
-                return accountService.UpdatePassword(emailphonenumber, newPassword, confirmPassword);
+                return accountService.UpdatePassword(userName, newPassword, confirmPassword);
+            }
+        }
+
+        public List<PatientModel> GetPatientList()
+        {
+            using (AccountService accountService = new AccountService(_dBContext, _mapper))
+            {
+                return accountService.GetPatientList();
+            }
+        }
+
+        public ReturnResponseModel<string> AddPatientAppointmentByUser(AddPatientAppointmentByUserInputModel addPatientAppointmentByUserInputModel)
+        {
+            using (AccountService accountService = new AccountService(_dBContext, _mapper))
+            {
+                return accountService.AddPatientAppointmentByUser(addPatientAppointmentByUserInputModel);
+            }
+        }
+
+        public List<UserModel> GetDoctorList()
+        {
+            using (AccountService accountService = new AccountService(_dBContext, _mapper))
+            {
+                return accountService.GetDoctorList();
             }
         }
     }
