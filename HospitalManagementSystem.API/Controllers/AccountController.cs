@@ -1,5 +1,6 @@
 ﻿using HospitalManagementSystem.API.Helpers;
 using HospitalManagementSystem.Models.Common;
+using HospitalManagementSystem.Models.InputModels;
 using HospitalManagementSystem.Models.Models;
 using HospitalManagementSystem.Repository.Abstract;
 using Microsoft.AspNetCore.Authorization;
@@ -28,11 +29,14 @@ namespace HospitalManagementSystem.API.Controllers
         {
             var returnResponse = new ReturnResponseModel<UserModel>();
             username = "abc@gmail.com";
-            password = "admin123";
+            password = "123456";
             try
             {
                 returnResponse = _accountRepository.LoginCredentialCheck(username, password);
-               // returnResponse.Data.JwtToken = _jwtService.GenerateToken(returnResponse.Data.Id);
+                if (returnResponse.status)
+                {
+                    returnResponse.Data.JwtToken = _jwtService.GenerateToken(returnResponse.Data.Id);
+                }
                 return Ok(returnResponse);
             }
             catch (Exception ex)
@@ -63,6 +67,97 @@ namespace HospitalManagementSystem.API.Controllers
                 return StatusCode(500, returnResponse);
             }
         }
+
+        [HttpPost("UpdatePassword")]
+        public IActionResult UpdatePassword(string username, string newPassword, string confirmPassword)
+        {
+            var returnResponse = new ReturnResponseModel<UserModel>();
+
+            try
+            {
+                returnResponse = _accountRepository.UpdatePassword(username, newPassword, confirmPassword);
+
+                return Ok(returnResponse);
+            }
+
+            catch (Exception ex)
+            {
+                returnResponse.status = false;
+                returnResponse.message = "An unknown error occured, please try again later.";
+
+                return StatusCode(500, returnResponse);
+            }
+        }
+
+        [HttpPost("RegisterUser")]
+        public IActionResult RegisterUser(RegisterUserInputModel registerUserInputModel)
+        {
+            var returnResponse = new ReturnResponseModel<string>();
+
+            try
+            {
+                returnResponse = _accountRepository.RegisterUser(registerUserInputModel);
+
+                return Ok(returnResponse);
+            }
+
+            catch (Exception ex)
+            {
+                returnResponse.status = false;
+                returnResponse.message = "An unknown error occured, please try again later.";
+
+                return StatusCode(500, returnResponse);
+            }
+        }
+
+        [HttpGet("GetDepartmentList")]
+        public IActionResult GetDepartmentList()
+        {
+            var departmentList = new List<DepartmentModel>();
+            var returnResponse = new ReturnResponseModel<string>();
+
+            try
+            {
+                departmentList = _accountRepository.GetDepartmentList();
+
+                return Ok(departmentList);
+            }
+
+            catch (Exception ex)
+            {
+                returnResponse.status = false;
+                returnResponse.message = "An unknown error occured, please try again later.";
+
+                return StatusCode(500, returnResponse);
+            }
+        }
+
+        [HttpGet("GetDesignationsByDepartmentId")]
+        public IActionResult GetDesignationsByDepartmentId(int departmentId)
+        {
+            var designationList = new List<KeyValueModel<int, string>>();
+            var returnResponse = new ReturnResponseModel<string>();
+
+            try
+            {
+                designationList = _accountRepository.GetDesignationsByDepartmentId(departmentId);
+
+                return Ok(designationList);
+            }
+
+            catch (Exception ex)
+            {
+                returnResponse.status = false;
+                returnResponse.message = "An unknown error occured, please try again later.";
+
+                return StatusCode(500, returnResponse);
+            }
+        }
+
+
+
+
+
 
         //[HttpGet("GetUser")]
         //[Authorize]
