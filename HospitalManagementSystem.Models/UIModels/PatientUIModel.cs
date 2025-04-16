@@ -128,7 +128,7 @@ namespace HospitalManagementSystem.Models.UIModels
 
         public bool isActive { get; set; } = true;
         public string Message { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } = "Scheduled";
 
     }
     

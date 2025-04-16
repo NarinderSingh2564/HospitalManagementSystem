@@ -20,7 +20,7 @@
 					{
 						<div class="alert alert-danger alert-dismissible mb-0" id="appointmentMessage">
 							@Model.Message
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
@@ -29,7 +29,7 @@
 					{
 						<div class="alert alert-success alert-dismissible mb-0" id="appointmentMessage">
 							@Model.Message
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
@@ -237,9 +237,10 @@
 						<div class="col-sm-12">
 							<div class="d-flex gap-2 justify-content-end">
 								<button type="button" class="btn btn-outline-secondary" id="cancelButton">Cancel</button>
-								<button type="submit" class="btn btn-primary" id="btnAddAppointment">
+								<button type="submit" class="btn btn-primary" name="btnAddAppointment" value="true" id="btnAddAppointment">
 									Create Appointment
 								</button>
+
 							</div>
 						</div>
 					</div>
@@ -270,9 +271,8 @@
 	$("#DepartmentId").on("change", function() {
 		$("#frmAddAppointment").validate().destroy();
 		$("#frmAddAppointment").submit();
-		// $("#PatientAppointmentUIModel_CRMNumber").attr("readonly", false).attr("value", "").val("");
 	});
-	
+
 	  $("#PatientType").on("change",function(){
 		  var selectedValue = $(this).val();
 			if (selectedValue === "" ) {
@@ -304,13 +304,18 @@
 		  }
 	  })
 
-
-
 	  $("#btnAddAppointment").on("click", function () {
 		$(".text-danger").show();
-		$("#btnAddAppointment").val("true");
-
+		// $("#btnAddAppointment").val("true");
 	  });
+
+	  const alertBox = $("#appointmentMessage");
+	  function frmOnSuccess(){
+		  if(alertBox.hasClass("alert-success")){
+			  let form = document.getElementById("frmAddAppointment");
+			  form.reset();
+		  }
+	  }
 
 </script>
 

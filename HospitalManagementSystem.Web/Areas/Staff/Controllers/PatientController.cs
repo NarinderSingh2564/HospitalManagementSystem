@@ -55,7 +55,11 @@ namespace HospitalManagementSystem.Web.Areas.Staff.Controllers
                 returnAddPatientAppointment.PatientAppointmentUIModel.DepartmentList = _patientRepository.GetDepartmentList().Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department }).ToList();
                 returnAddPatientAppointment.PatientAppointmentUIModel.DoctorList = _patientRepository.GetDoctorByDepartmentId(PatientUIModel.PatientAppointmentUIModel.DepartmentId);
 
-                if (returnAddPatientAppointment.PatientAppointmentUIModel.PatientType == "Old Patient")
+                var isOldPatient = returnAddPatientAppointment.PatientAppointmentUIModel.PatientType == "Old Patient";
+                var isBookAppointmentClicked = !string.IsNullOrEmpty(Request.Form["btnAddAppointment"]);
+
+
+                if (isOldPatient && !isBookAppointmentClicked)
                 {
 
                     var crmNumber = PatientUIModel.PatientAppointmentUIModel.CRMNumber;
@@ -65,10 +69,6 @@ namespace HospitalManagementSystem.Web.Areas.Staff.Controllers
                     {
                         returnAddPatientAppointment = _mapper.Map<PatientUIModel>(returnResponse.Data);
 
-                        //returnAddPatientAppointment.PatientAppointmentUIModel.DepartmentId = returnResponse.Data.PatientAppointmentInputModel.DepartmentId;
-                        //returnAddPatientAppointment.DOB = returnResponse.Data.DOB;
-                        //var deptId = returnAddPatientAppointment.PatientAppointmentUIModel.DepartmentId;
-                        
                         returnAddPatientAppointment.PatientAppointmentUIModel.DepartmentList = _patientRepository.GetDepartmentList().Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department }).ToList();
                         returnAddPatientAppointment.PatientAppointmentUIModel.DoctorList = _patientRepository.GetDoctorByDepartmentId(returnAddPatientAppointment.PatientAppointmentUIModel.DepartmentId);
                         
@@ -84,7 +84,7 @@ namespace HospitalManagementSystem.Web.Areas.Staff.Controllers
                 }
 
                 
-                if (!string.IsNullOrEmpty(Request.Form["btnAddAppointment"]))
+                if (isBookAppointmentClicked)
                 {
                     if (ModelState.IsValid)
                     {
