@@ -36,8 +36,8 @@ namespace HospitalManagementSystem.API.Controllers
                 if (returnResponse.status)
                 {
                     returnResponse.Data.JwtToken = _jwtService.GenerateToken(returnResponse.Data.Id);
-                }
-                return Ok(returnResponse);
+				}
+				return Ok(returnResponse);
             }
             catch (Exception ex)
             {
@@ -153,31 +153,5 @@ namespace HospitalManagementSystem.API.Controllers
                 return StatusCode(500, returnResponse);
             }
         }
-
-
-
-
-
-
-        //[HttpGet("GetUser")]
-        //[Authorize]
-        //public IActionResult GetUser()
-        //{
-        //    var returnResponse = new ReturnResponseModel<UserModel>();
-
-        //    try
-        //    {
-        //        returnResponse = _accountRepository.CheckUserByEmailOrPhoneNumber("abc@gmail.com", "admin123");
-        //        return Ok(returnResponse.Data);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        returnResponse.status = false;
-        //        returnResponse.message = "An unknown error occured, please try again later.";
-
-        //        return StatusCode(500, returnResponse);
-        //    }
-        //}
-
     }
 }

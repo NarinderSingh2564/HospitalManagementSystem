@@ -23,7 +23,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "JWT API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hospital Management System", Version = "v1" });
 
     var securityScheme = new OpenApiSecurityScheme             // Define JWT authentication scheme
     {
@@ -57,8 +57,9 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
+		ClockSkew = TimeSpan.Zero,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+		ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
@@ -84,7 +85,10 @@ app.UseCors(option => option.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllers();
 
