@@ -24,8 +24,8 @@ namespace HospitalManagementSystem.API.Controllers
             _jwtService = jwtService;
         }
 
-        [HttpPost("Login")]
-        public IActionResult Login(string username, string password)
+        [HttpPost("LoginCredentialCheck")]
+        public IActionResult LoginCredentialCheck(string username, string password)
         {
             var returnResponse = new ReturnResponseModel<UserModel>();
             username = "abc@gmail.com";
