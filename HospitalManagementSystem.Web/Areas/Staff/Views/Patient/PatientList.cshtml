@@ -1,0 +1,118 @@
+﻿@model List<HospitalManagementSystem.Models.Models.PatientModel>
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Row starts -->
+<div class="row gx-3">
+	<div class="col-sm-12">
+		<div class="card">
+			<div class="card-header d-flex align-items-center justify-content-between">
+				<h5 class="card-title">Patients List</h5>
+				<a asp-area="Staff" asp-controller="Patient" asp-action="AddPatientAppointment" class="btn btn-primary btn-round">
+					@* <a href="add-patient.html" class="btn btn-primary ms-auto"> *@
+					Add Patient
+				</a>
+			</div>
+			<div class="card-body">
+
+				<!-- Table starts -->
+				<div class="table-responsive">
+					<div id="basicExample_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+						<div class="row">
+							<div class="col-sm-12 col-md-6">
+								<div class="dataTables_length" id="basicExample_length">
+									<label>
+										Display
+										<select name="basicExample_length" aria-controls="basicExample" class="form-select form-select-sm">
+											<option value="12">12</option>
+											<option value="25">25</option>
+											<option value="50">50</option>
+										</select> Records Per Page
+									</label>
+								</div>
+							</div>
+							<div class="col-sm-12 col-md-6">
+								<div id="basicExample_filter" class="dataTables_filter">
+									<label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="basicExample"></label>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<table id="basicExample" class="table truncate m-0 align-middle dataTable no-footer" aria-describedby="basicExample_info">
+									<thead>
+										<tr>
+											<th class="sorting sorting_asc" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-sort="ascending" aria-label="No.: activate to sort column descending" style="width: 25.3281px;">CRM No.</th>
+											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Patient Name: activate to sort column ascending" style="width: 114.844px;">Patient Name</th>
+											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Patient type: activate to sort column ascending" style="width: 66.3594px;">Patient Type</th>
+											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Reason for visit: activate to sort column ascending" style="width: 66.3594px;">Reason for visit</th>
+											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 55.625px;">Mobile</th>
+											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 89.2969px;">Email</th>
+											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Actions: activate to sort column ascending" style="width: 77.8281px;">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+
+										@foreach (var patient in Model)
+										{
+											<tr class="odd">
+												<td class="sorting_1">#80762</td>
+												<td>
+													<img src="~/theme/img/jm_denis.jpg" class="img-shadow img-2x rounded-5 me-1" height="50px" alt="Medical Admin Template"><br />
+													@patient.FirstName @patient.LastName
+												</td>
+												<td>@patient.PatientAppointmentModel.PatientType</td>
+												<td>@patient.PatientAppointmentModel?.ReasonForVisit</td>
+												<td>@patient.PhoneNumber</td>
+												<td>@patient.Email</td>
+												<td>
+													<div class="d-inline-flex gap-1">
+														<button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delRow">
+															<i class="fa fa-trash-alt"></i>
+														</button>
+														<a href="edit-patient.html" class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Patient Details">
+															<i class="fa fa-edit"></i>
+														</a>
+														<a href="patient-dashboard.html" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View Dashboard">
+															<i class="fa fa-eye"></i>
+														</a>
+													</div>
+												</td>
+											</tr>
+
+										}
+									</tbody>
+								</table>
+							</div>
+						</div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="basicExample_info" role="status" aria-live="polite">Showing Page 1 of 1</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="basicExample_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="basicExample_previous"><a href="#" aria-controls="basicExample" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="basicExample" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item next disabled" id="basicExample_next"><a href="#" aria-controls="basicExample" data-dt-idx="2" tabindex="0" class="page-link">Next</a></li></ul></div></div></div>
+					</div>
+				</div>
+				<!-- Table ends -->
+				<!-- Modal Delete Row -->
+				<div class="modal fade" id="delRow" tabindex="-1" aria-labelledby="delRowLabel" aria-hidden="true">
+					<div class="modal-dialog modal-sm">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="delRowLabel">
+									Confirm
+								</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								Are you sure you want to delete the patient?
+							</div>
+							<div class="modal-footer">
+								<div class="d-flex justify-content-end gap-2">
+									<button class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">No</button>
+									<button class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Yes</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>

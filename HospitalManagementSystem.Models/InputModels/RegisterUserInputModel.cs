@@ -1,4 +1,6 @@
-﻿namespace HospitalManagementSystem.Models.InputModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace HospitalManagementSystem.Models.InputModels
 {
     public class RegisterUserInputModel
     {
@@ -18,4 +20,5 @@
         public bool isActive { get; set; }
         public string IsStaff { get; set; } = "Yes";
     }
+
 }

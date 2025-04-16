@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HospitalManagementSystem.Models.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalManagementSystem.Web.Areas.Staff.Controllers
 {
@@ -14,6 +15,6 @@ namespace HospitalManagementSystem.Web.Areas.Staff.Controllers
         {
             return View();
         }
-       
+
     }
 }

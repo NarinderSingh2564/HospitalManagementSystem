@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.InputModels;
+using HospitalManagementSystem.Models.Models;
 using HospitalManagementSystem.Models.UIModels;
 using HospitalManagementSystem.Repository.Abstract;
 using Microsoft.AspNetCore.Mvc;
@@ -26,13 +27,13 @@ namespace HospitalManagementSystem.Web.Controllers
         {
             var loginUIModel = new LoginUIModel
             {
-                Email = "rohan@gmail.com",
-                Password = "abc123",
+                Email = "abc@gmail.com",
+                Password = "asdasd",
                 registerUser = new RegisterUserUIModel()
             };
 
             loginUIModel.registerUser.DepartmentList = _accountRepository.GetDepartmentList().Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department }).ToList();
-            
+
             loginUIModel.Message = TempData["RegistrationMessage"] as string;
             loginUIModel.Status = TempData["RegistrationStatus"] as bool?;
 
@@ -77,17 +78,17 @@ namespace HospitalManagementSystem.Web.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    var returnResponse = _accountRepository.CheckUserByEmailOrPhoneNumber(forgetPasswordUIModel.EmailPhoneNumber);
+                    var returnResponse = _accountRepository.CheckUserByEmailOrPhoneNumber(forgetPasswordUIModel.UserName);
                     returnResponseModel.Status = returnResponse.status;
                     returnResponseModel.Message = returnResponse.message;
 
                     if (returnResponse.status)
                     {
-                        returnResponseModel.EmailPhoneNumber = forgetPasswordUIModel.EmailPhoneNumber;
+                        returnResponseModel.UserName = forgetPasswordUIModel.UserName;
 
                         if (!string.IsNullOrEmpty(forgetPasswordUIModel.NewPassword) && !string.IsNullOrEmpty(forgetPasswordUIModel.ConfirmPassword))
                         {
-                            var updatePasswordResponse = _accountRepository.UpdatePassword(forgetPasswordUIModel.EmailPhoneNumber, forgetPasswordUIModel.NewPassword, forgetPasswordUIModel.ConfirmPassword);
+                            var updatePasswordResponse = _accountRepository.UpdatePassword(forgetPasswordUIModel.UserName, forgetPasswordUIModel.NewPassword, forgetPasswordUIModel.ConfirmPassword);
                             returnResponseModel.Status = updatePasswordResponse.status;
                             returnResponseModel.Message = updatePasswordResponse.message;
                         }
@@ -119,8 +120,6 @@ namespace HospitalManagementSystem.Web.Controllers
 
                 returnRegisterUser.DepartmentList = _accountRepository.GetDepartmentList().Select(x => new KeyValueModel<int, string> { key = x.Id, value = x.Department }).ToList();
                 returnRegisterUser.DesignationList = _accountRepository.GetDesignationsByDepartmentId(registerUserUIModel.DepartmentId);
-                returnRegisterUser.Password = registerUserUIModel.Password;
-                returnRegisterUser.ConfirmPassword = registerUserUIModel.ConfirmPassword;
 
                 if (!string.IsNullOrEmpty(Request.Form["btnSignup"]))
                 {

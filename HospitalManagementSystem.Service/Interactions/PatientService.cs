@@ -1,7 +1,12 @@
 ﻿using System.ComponentModel;
 using AutoMapper;
 using HospitalManagementSystem.Data;
+using HospitalManagementSystem.Data.DBClasses;
+using HospitalManagementSystem.Models.Common;
+using HospitalManagementSystem.Models.InputModels;
 using HospitalManagementSystem.Models.Models;
+using HospitalManagementSystem.Models.UIModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace HospitalManagementSystem.Service.Interactions
 {
@@ -53,19 +58,86 @@ namespace HospitalManagementSystem.Service.Interactions
 
         public List<PatientModel> GetPatientList()
         {
-            var patientList = new List<PatientModel>();
-            var dbPatientList = _dbcontext.PatientMaster.ToList();
+            var dbPatientList = _dbcontext.PatientAppointmentMaster.Include(p => p.PatientMaster).ToList();
+            var patientList = _mapper.Map<List<PatientModel>>(dbPatientList);
+            return patientList;
 
-            foreach (var item in dbPatientList)
+        }
+
+        public ReturnResponseModel<PatientInputModel> CheckPatientByCRMNumber(string crmNumber)
+        {
+            var returnResponseModel = new ReturnResponseModel<PatientInputModel>();
+            var dbPatientEntityByCRMNumber = _dbcontext.PatientAppointmentMaster.Where(u => u.CRMNumber == crmNumber).FirstOrDefault();
+            
+            if (dbPatientEntityByCRMNumber != null)
             {
-                patientList.Add(new PatientModel
+                var dbPatientEntity = _dbcontext.PatientMaster.Where(u => u.Id == dbPatientEntityByCRMNumber.PatientId).FirstOrDefault();
+
+                if (dbPatientEntity != null)
                 {
-                    Id = item.Id,
-                    FirstName = item.FirstName + " "+item.LastName,
+                    var patientInputModel = new PatientInputModel();
+
+                    patientInputModel = _mapper.Map<PatientInputModel>(dbPatientEntity);
+                    patientInputModel.PatientAppointmentInputModel = _mapper.Map<PatientAppointmentInputModel>(dbPatientEntityByCRMNumber);
+
+                    returnResponseModel.Data = patientInputModel;
+                    returnResponseModel.message = "Patient found. Details fetched successfully.";
+                    returnResponseModel.status = true;
+                }
+            }
+            else
+            {
+                returnResponseModel.message = "Patient not found with this CRM Number...";
+                returnResponseModel.status = false;
+                returnResponseModel.Data = null;
+            }
+            return returnResponseModel;
+        }
+
+        public ReturnResponseModel<string> AddPatientAppointment(PatientInputModel patientInputModel)
+        {
+            var returnResponseModel = new ReturnResponseModel<string>();
+            var dbPatientEntityByCRMNumber = _dbcontext.PatientAppointmentMaster.Where(u => u.CRMNumber == patientInputModel.PatientAppointmentInputModel.CRMNumber).FirstOrDefault();
+
+            if (dbPatientEntityByCRMNumber != null)
+            {
+                returnResponseModel.message = "Patient already exists. Please enter CRM Number...";
+                returnResponseModel.status = false;
+            }
+            else
+            {
+                var patientMaster = _mapper.Map<PatientMaster>(patientInputModel);
+                patientMaster.Password = "abc@123";
+                _dbcontext.PatientMaster.Add(patientMaster);
+                _dbcontext.SaveChanges();
+
+
+                var patientAppointmentMaster = _mapper.Map<PatientAppointmentMaster>(patientInputModel.PatientAppointmentInputModel);
+                patientAppointmentMaster.PatientId = patientMaster.Id;
+                _dbcontext.PatientAppointmentMaster.Add(patientAppointmentMaster);
+                _dbcontext.SaveChanges();
+
+                returnResponseModel.message = "Patient Appointment added successfully!!! ";
+                returnResponseModel.status = true;
+            }
+            return returnResponseModel;
+        }
+        public List<KeyValueModel<int, string>> GetDoctorByDepartmentId(int departmentId)
+        {
+            var doctorList = new List<KeyValueModel<int, string>>();
+            var dbDoctorListByDepartmentId = _dbcontext.UserMaster.Include(u => u.DesignationMaster).Where(u => u.IsDoctor == true && u.isActive == true && u.DesignationMaster.DepartmentId == departmentId).OrderBy(u => u.FirstName).ToList();
+
+            foreach (var item in dbDoctorListByDepartmentId)
+            {
+                doctorList.Add(new KeyValueModel<int, string>
+                {
+                    key = item.Id,
+                    value = item.FirstName + " " + item.LastName + " " + item.DesignationMaster.DesignationName + " ( " + item.DesignationMaster.DesignationCode + " )",
+
                 });
             }
-
-            return patientList;
+            return doctorList;
         }
+
     }
 }

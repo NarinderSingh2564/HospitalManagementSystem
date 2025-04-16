@@ -2,6 +2,10 @@
 {
     public class PatientModel
     {
+        public PatientModel()
+        {
+            PatientAppointmentModel = new PatientAppointmentModel();
+        }
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -16,14 +20,29 @@
         public string PhoneNumber { get; set; }
         public string EmergencyPhoneNumber { get; set; }
         public string Gender { get; set; }
-        public DateTime AdmissionDate { get; set; }
+        public DateTime AdmissionDate { get; set; } 
         public bool MedicalHistory { get; set; }
         public bool IsInsured { get; set; }
         public string InsuranceCompany { get; set; }
         public string InsuranceNumber { get; set; }
-        public bool isActive { get; set; }
+        public string isActive { get; set; }
         public string IsStaff { get; set; }
-
+        public PatientAppointmentModel PatientAppointmentModel { get; set; }
+    }
+    public class PatientAppointmentModel
+    {
+        public int PatientId { get; set; }
+        public int DepartmentId { get; set; }
+        public int DoctorId { get; set; }
+        public DateTime AppointmentOn { get; set; }
+        public int TimeSlotId { get; set; }
+        public string PatientType { get; set; }
+        public string CRMNumber { get; set; }
+        public string ReasonForVisit { get; set; }
+        public string DoctorNotes { get; set; }
+        public string Status { get; set; }
+        public DateTime? RescheduledOn { get; set; }
+        public int? RescheduledTimeSlotId { get; set; }
 
     }
 }

@@ -5,6 +5,7 @@ using HospitalManagementSystem.Data.DBClasses;
 using HospitalManagementSystem.Models.Common;
 using HospitalManagementSystem.Models.InputModels;
 using HospitalManagementSystem.Models.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HospitalManagementSystem.Service.Interactions
 {
@@ -99,19 +100,19 @@ namespace HospitalManagementSystem.Service.Interactions
             return returnResponseModel;
         }
 
-        public ReturnResponseModel<string> CheckUserByEmailOrPhoneNumber(string emailphonenumber)
+        public ReturnResponseModel<string> CheckUserByEmailOrPhoneNumber(string userName)
         {
             var returnResponseModel = new ReturnResponseModel<string>();
 
-            if (string.IsNullOrEmpty(emailphonenumber))
+            if (string.IsNullOrEmpty(userName))
             {
                 returnResponseModel.status = false;
                 returnResponseModel.message = "Email or phone number is required.";
             }
             else
             {
-                var dbUserEmailObj = _dbcontext.UserMaster.Where(u => u.Email == emailphonenumber).FirstOrDefault();
-                var dbUserPhoneNumberObj = _dbcontext.UserMaster.Where(u => u.PhoneNumber == emailphonenumber).FirstOrDefault();
+                var dbUserEmailObj = _dbcontext.UserMaster.Where(u => u.Email == userName).FirstOrDefault();
+                var dbUserPhoneNumberObj = _dbcontext.UserMaster.Where(u => u.PhoneNumber == userName).FirstOrDefault();
 
                 if (dbUserEmailObj != null)
                 {
@@ -132,11 +133,11 @@ namespace HospitalManagementSystem.Service.Interactions
             return returnResponseModel;
         }
 
-        public ReturnResponseModel<UserModel> UpdatePassword(string emailphonenumber, string newPassword, string confirmPassword)
+        public ReturnResponseModel<UserModel> UpdatePassword(string userName, string newPassword, string confirmPassword)
         {
             var returnResponseModel = new ReturnResponseModel<UserModel>();
 
-            if (string.IsNullOrEmpty(emailphonenumber))
+            if (string.IsNullOrEmpty(userName))
             {
                 returnResponseModel.status = false;
                 returnResponseModel.message = "Email/Phone number is required.";
@@ -158,7 +159,7 @@ namespace HospitalManagementSystem.Service.Interactions
             }
             else
             {
-                var dbUserObj = _dbcontext.UserMaster.Where(u => u.Email == emailphonenumber || u.PhoneNumber == emailphonenumber).FirstOrDefault();
+                var dbUserObj = _dbcontext.UserMaster.Where(u => u.Email == userName || u.PhoneNumber == userName).FirstOrDefault();
 
                 if (dbUserObj == null)
                 {
@@ -238,22 +239,6 @@ namespace HospitalManagementSystem.Service.Interactions
             return departmentList;
         }
 
-        //public List<DesignationModel> GetDesignationList()
-        //{
-        //    var designationList = new List<DesignationModel>();
-        //    var dbDesignationList = _dbcontext.DesignationMaster.OrderBy(d=>d.DesignationName).ToList();
-
-        //    foreach (var item in dbDesignationList)
-        //    {
-        //        designationList.Add(new DesignationModel
-        //        {
-        //            Id = item.Id,
-        //            Designation = item.DesignationName + " ( " + item.DesignationCode + " )"
-        //        });
-        //    }
-        //    return designationList;
-        //}
-
         public List<KeyValueModel<int, string>> GetDesignationsByDepartmentId(int departmentId)
         {
             var designationList = new List<KeyValueModel<int, string>>();
@@ -274,5 +259,6 @@ namespace HospitalManagementSystem.Service.Interactions
 
             return designationList;
         }
+
     }
 }

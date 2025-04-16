@@ -18,17 +18,17 @@ namespace HospitalManagementSystem.Web.Controllers
             _mapper = mapper;
         }
 
-        public IActionResult Index()
-        {
-            var patientList = _patientRepository.GetPatientList();
+        //public IActionResult Index()
+        //{
+        //    var patientList = _patientRepository.GetPatientList();
 
-            if (patientList == null)
-            {
-                patientList = new List<PatientModel>(); // Initialize to an empty list if null
-            }
+        //    if (patientList == null)
+        //    {
+        //        patientList = new List<PatientModel>();
+        //    }
 
 
-            return View(patientList);
-        }
+        //    return View(patientList);
+        //}
     }
 }

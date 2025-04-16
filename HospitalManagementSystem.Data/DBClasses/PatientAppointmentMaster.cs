@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HospitalManagementSystem.Data.DBClasses
 {
@@ -40,11 +35,11 @@ namespace HospitalManagementSystem.Data.DBClasses
 
         [StringLength(200)]
         [Column(TypeName = "varchar(200)")]
-        public string DoctorNotes { get; set; } 
+        public string DoctorNotes { get; set; }
 
         [StringLength(20)]
         [Column(TypeName = "varchar(20)")]
-        public string Status { get; set; }
+        public string Status { get; set; } = "Scheduled";
         public DateTime? RescheduledOn { get; set; }
         public int? RescheduledTimeSlotId { get; set; }
         public int CreatedBy { get; set; }
