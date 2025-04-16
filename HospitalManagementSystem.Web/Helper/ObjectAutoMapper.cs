@@ -26,7 +26,8 @@ namespace HospitalManagementSystem.Web.Helper
             CreateMap<PatientAppointmentInputModel, PatientAppointmentUIModel>().ReverseMap();
 
             CreateMap<PatientInputModel, PatientMaster>().ReverseMap();
-            CreateMap<PatientAppointmentInputModel, PatientAppointmentMaster>().ReverseMap();
+            CreateMap<PatientAppointmentInputModel, PatientAppointmentMaster>().ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.PatientId, opt => opt.Ignore()).ReverseMap();
 
 
         }
