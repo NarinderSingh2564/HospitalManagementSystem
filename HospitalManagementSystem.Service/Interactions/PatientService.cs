@@ -68,7 +68,7 @@ namespace HospitalManagementSystem.Service.Interactions
         {
             var returnResponseModel = new ReturnResponseModel<PatientInputModel>();
             var dbPatientEntityByCRMNumber = _dbcontext.PatientAppointmentMaster.Where(u => u.CRMNumber == crmNumber).FirstOrDefault();
-            
+
             if (dbPatientEntityByCRMNumber != null)
             {
                 var dbPatientEntity = _dbcontext.PatientMaster.Where(u => u.Id == dbPatientEntityByCRMNumber.PatientId).FirstOrDefault();
@@ -101,8 +101,21 @@ namespace HospitalManagementSystem.Service.Interactions
 
             if (dbPatientEntityByCRMNumber != null)
             {
-                returnResponseModel.message = "Patient already exists. Please enter CRM Number...";
-                returnResponseModel.status = false;
+                
+
+                
+                var updatedAppointment = _mapper.Map<PatientAppointmentMaster>(patientInputModel.PatientAppointmentInputModel);
+
+                _mapper.Map(patientInputModel.PatientAppointmentInputModel, dbPatientEntityByCRMNumber);
+
+                dbPatientEntityByCRMNumber.UpdatedBy = 1;
+                dbPatientEntityByCRMNumber.UpdatedOn = DateTime.Now;
+                
+                _dbcontext.PatientAppointmentMaster.Update(dbPatientEntityByCRMNumber);
+                _dbcontext.SaveChanges();
+
+                returnResponseModel.message = "Existing appointment updated successfully!";
+                returnResponseModel.status = true;
             }
             else
             {
@@ -111,13 +124,12 @@ namespace HospitalManagementSystem.Service.Interactions
                 _dbcontext.PatientMaster.Add(patientMaster);
                 _dbcontext.SaveChanges();
 
-
                 var patientAppointmentMaster = _mapper.Map<PatientAppointmentMaster>(patientInputModel.PatientAppointmentInputModel);
                 patientAppointmentMaster.PatientId = patientMaster.Id;
                 _dbcontext.PatientAppointmentMaster.Add(patientAppointmentMaster);
                 _dbcontext.SaveChanges();
 
-                returnResponseModel.message = "Patient Appointment added successfully!!! ";
+                returnResponseModel.message = "New Patient Appointment added successfully!!! ";
                 returnResponseModel.status = true;
             }
             return returnResponseModel;
