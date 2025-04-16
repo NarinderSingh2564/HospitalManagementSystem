@@ -19,6 +19,9 @@ namespace HospitalManagementSystem.Data
         public DbSet<InPatientDepartmentMaster> InPatientDepartmentMaster { get; set; }
         public DbSet<MedicineMaster> MedicineMaster { get; set; }
         public DbSet<PatientMedicinePrescriptionDetailMaster> PatientMedicinePrescriptionDetailMaster { get; set; }
-
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasDefaultSchema("HMS");
+        }
     }
 }

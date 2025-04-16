@@ -24,7 +24,6 @@ namespace HospitalManagementSystem.API.Controllers
         }
 
         [HttpPost("Login")]
-
         public IActionResult Login(string username, string password)
         {
             var returnResponse = new ReturnResponseModel<UserModel>();
@@ -32,7 +31,7 @@ namespace HospitalManagementSystem.API.Controllers
             password = "admin123";
             try
             {
-                returnResponse = _accountRepository.CheckLoginDetails(username, password);
+                returnResponse = _accountRepository.LoginCredentialCheck(username, password);
                // returnResponse.Data.JwtToken = _jwtService.GenerateToken(returnResponse.Data.Id);
                 return Ok(returnResponse);
             }
@@ -45,14 +44,14 @@ namespace HospitalManagementSystem.API.Controllers
             }
         }
 
-        [HttpGet("CheckUserExist")]
-        public IActionResult CheckUserExist(string username)
+        [HttpGet("CheckUserByEmailOrPhoneNumber")]
+        public IActionResult CheckUserByEmailOrPhoneNumber(string username)
         {
-            var returnResponse = new ReturnResponseModel<UserModel>();
+            var returnResponse = new ReturnResponseModel<string>();
 
             try
             {
-                returnResponse = _accountRepository.ForgetPasswordDetails(username);
+                returnResponse = _accountRepository.CheckUserByEmailOrPhoneNumber(username);
 
                 return Ok(returnResponse);
             }
@@ -65,25 +64,25 @@ namespace HospitalManagementSystem.API.Controllers
             }
         }
 
-        [HttpGet("GetUser")]
-        [Authorize]
-        public IActionResult GetUser()
-        {
-            var returnResponse = new ReturnResponseModel<UserModel>();
+        //[HttpGet("GetUser")]
+        //[Authorize]
+        //public IActionResult GetUser()
+        //{
+        //    var returnResponse = new ReturnResponseModel<UserModel>();
 
-            try
-            {
-                returnResponse = _accountRepository.CheckLoginDetails("abc@gmail.com", "admin123");
-                return Ok(returnResponse.Data);
-            }
-            catch (Exception ex)
-            {
-                returnResponse.status = false;
-                returnResponse.message = "An unknown error occured, please try again later.";
+        //    try
+        //    {
+        //        returnResponse = _accountRepository.CheckUserByEmailOrPhoneNumber("abc@gmail.com", "admin123");
+        //        return Ok(returnResponse.Data);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        returnResponse.status = false;
+        //        returnResponse.message = "An unknown error occured, please try again later.";
 
-                return StatusCode(500, returnResponse);
-            }
-        }
+        //        return StatusCode(500, returnResponse);
+        //    }
+        //}
 
     }
 }
