@@ -18,4 +18,8 @@
     <PackageReference Include="Stripe.net" Version="47.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HospitalManagementSystem.Data\HospitalManagementSystem.Data.csproj" />
+  </ItemGroup>
+
 </Project>

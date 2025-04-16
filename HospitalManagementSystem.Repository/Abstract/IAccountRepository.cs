@@ -13,8 +13,8 @@ namespace HospitalManagementSystem.Repository.Abstract
         //List<DesignationModel> GetDesignationList();
         List<KeyValueModel<int, string>> GetDesignationsByDepartmentId(int departmentId);
         ReturnResponseModel<UserModel> UpdatePassword(string userName, string newPassword, string confirmPassword);
-        List<PatientModel> GetPatientList();
-        ReturnResponseModel<string> AddPatientAppointmentByUser(AddPatientAppointmentByUserInputModel addPatientAppointmentByUserInputModel);
-        List<UserModel> GetDoctorList();
+        //List<PatientModel> GetPatientList();
+        //ReturnResponseModel<string> AddPatientAppointmentByUser(AddPatientAppointmentByUserInputModel addPatientAppointmentByUserInputModel);
+        //List<UserModel> GetDoctorList();
     }
 }

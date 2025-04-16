@@ -9,7 +9,7 @@
 		<div class="card">
 			<div class="card-header d-flex align-items-center justify-content-between">
 				<h5 class="card-title">Patients List</h5>
-				<a asp-area="Home" asp-controller="Account" asp-action="AddPatientAppointmentByUser" class="btn btn-primary ms-auto">
+				<a asp-area="Staff" asp-controller="Patient" asp-action="AddPatientAppointment" class="btn btn-primary btn-round">
 					@* <a href="add-patient.html" class="btn btn-primary ms-auto"> *@
 					Add Patient
 				</a>
@@ -43,15 +43,12 @@
 								<table id="basicExample" class="table truncate m-0 align-middle dataTable no-footer" aria-describedby="basicExample_info">
 									<thead>
 										<tr>
-											<th class="sorting sorting_asc" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-sort="ascending" aria-label="No.: activate to sort column descending" style="width: 25.3281px;">No.</th>
+											<th class="sorting sorting_asc" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-sort="ascending" aria-label="No.: activate to sort column descending" style="width: 25.3281px;">CRM No.</th>
 											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Patient Name: activate to sort column ascending" style="width: 114.844px;">Patient Name</th>
-											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending" style="width: 47.75px;">Gender</th>
-											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 26px;">Age</th>
-											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Blood Group: activate to sort column ascending" style="width: 83.2188px;">Blood Group</th>
-											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Treatment: activate to sort column ascending" style="width: 66.3594px;">Treatment</th>
+											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Patient type: activate to sort column ascending" style="width: 66.3594px;">Patient Type</th>
+											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Reason for visit: activate to sort column ascending" style="width: 66.3594px;">Reason for visit</th>
 											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 55.625px;">Mobile</th>
 											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 89.2969px;">Email</th>
-											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Address: activate to sort column ascending" style="width: 148.516px;">Address</th>
 											<th class="sorting" tabindex="0" aria-controls="basicExample" rowspan="1" colspan="1" aria-label="Actions: activate to sort column ascending" style="width: 77.8281px;">Actions</th>
 										</tr>
 									</thead>
@@ -62,18 +59,13 @@
 											<tr class="odd">
 												<td class="sorting_1">#80762</td>
 												<td>
-													<img src="~/theme/img/jm_denis.jpg" class="img-shadow img-2x rounded-5 me-1" height="80%" alt="Medical Admin Template">
+													<img src="~/theme/img/jm_denis.jpg" class="img-shadow img-2x rounded-5 me-1" height="50px" alt="Medical Admin Template"><br />
 													@patient.FirstName @patient.LastName
 												</td>
-												<td><span class="badge bg-warning-subtle text-warning">@patient.Gender</span></td>
-												<td>28</td>
-												<td>@patient.BloodGroup</td>
-												<td>
-													Cyclospora
-												</td>
+												<td>@patient.PatientAppointmentModel.PatientType</td>
+												<td>@patient.PatientAppointmentModel?.ReasonForVisit</td>
 												<td>@patient.PhoneNumber</td>
 												<td>@patient.Email</td>
-												<td>360 Branden Knoll</td>
 												<td>
 													<div class="d-inline-flex gap-1">
 														<button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delRow">
@@ -124,30 +116,3 @@
 		</div>
 	</div>
 </div>
-<!-- Row ends -->
-@* @if (Model != null)
-{
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Email</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var patient in Model)
-			{
-				<tr>
-					<td>@patient.FirstName</td>
-					<td>@patient.Email</td>
-				</tr>
-
-			}
-		</tbody>
-	</table>
-}
-else
-{
-	<p>No patients available.</p>
-}
- *@

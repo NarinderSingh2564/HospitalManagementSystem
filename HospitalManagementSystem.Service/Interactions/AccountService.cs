@@ -239,22 +239,6 @@ namespace HospitalManagementSystem.Service.Interactions
             return departmentList;
         }
 
-        //public List<DesignationModel> GetDesignationList()
-        //{
-        //    var designationList = new List<DesignationModel>();
-        //    var dbDesignationList = _dbcontext.DesignationMaster.OrderBy(d=>d.DesignationName).ToList();
-
-        //    foreach (var item in dbDesignationList)
-        //    {
-        //        designationList.Add(new DesignationModel
-        //        {
-        //            Id = item.Id,
-        //            Designation = item.DesignationName + " ( " + item.DesignationCode + " )"
-        //        });
-        //    }
-        //    return designationList;
-        //}
-
         public List<KeyValueModel<int, string>> GetDesignationsByDepartmentId(int departmentId)
         {
             var designationList = new List<KeyValueModel<int, string>>();
@@ -276,93 +260,5 @@ namespace HospitalManagementSystem.Service.Interactions
             return designationList;
         }
 
-        public List<PatientModel> GetPatientList()
-        {
-            //var patientList = new List<PatientModel>();
-            var dbPatientList = _dbcontext.PatientMaster.ToList();
-
-            //foreach (var item in dbPatientList)
-            //{
-            //    patientList.Add(new PatientModel
-            //    {
-            //        Id = item.Id,
-            //        FirstName = item.FirstName,
-            //        LastName = item.LastName,
-            //        Email = item.Email,
-            //        Password = item.Password,
-            //        MaritalStatus = item.MaritalStatus,
-            //        FatherName = item.FatherName,
-            //        MotherName = item.MotherName,
-            //        SpouseName = item.SpouseName,
-            //        DOB = item.DOB,
-            //        BloodGroup = item.BloodGroup,
-            //        PhoneNumber = item.PhoneNumber,
-            //        EmergencyPhoneNumber = item.EmergencyPhoneNumber,
-            //        Gender = item.Gender,
-            //        AdmissionDate = item.AdmissionDate,
-            //        MedicalHistory = item.MedicalHistory,
-            //        IsInsured = item.IsInsured,
-            //        InsuranceCompany = item.InsuranceCompany,
-            //        InsuranceNumber = item.InsuranceNumber,
-            //        //isActive = item.isActive,
-            //        IsStaff = item.IsStaff
-            //    });
-            //}
-            var patientList = _mapper.Map<List<PatientModel>>(dbPatientList);
-
-            return patientList;
-        }
-
-        public ReturnResponseModel<string> AddPatientAppointmentByUser(AddPatientAppointmentByUserInputModel addPatientAppointmentByUserInputModel)
-        {
-            var returnResponseModel = new ReturnResponseModel<string>();
-            var dbPatientEntityByEmail = _dbcontext.PatientMaster.Where(u => u.Email == addPatientAppointmentByUserInputModel.Email).FirstOrDefault();
-            
-            if (dbPatientEntityByEmail != null)
-            {
-                returnResponseModel.message = "Patient already exists. Please enter Email...";
-                returnResponseModel.status = false;
-            }
-            else
-            {
-                var dbPatientEntityByPhoneNumber = _dbcontext.PatientMaster.Where(u => u.PhoneNumber == addPatientAppointmentByUserInputModel.PhoneNumber).FirstOrDefault();
-                
-                if (dbPatientEntityByPhoneNumber != null)
-                {
-                    returnResponseModel.message = "Phone number already exists. Please Login...";
-                    returnResponseModel.status = false;
-                }
-                else
-                {
-                    var patientMaster = _mapper.Map<PatientMaster>(addPatientAppointmentByUserInputModel);
-                   
-                    _dbcontext.PatientMaster.Add(patientMaster);
-                    _dbcontext.SaveChanges();
-                    
-                    returnResponseModel.message = "Patient added successfully!!! ";
-                    returnResponseModel.status = true;
-                }
-            }
-            return returnResponseModel;
-        }
-
-        public List<UserModel> GetDoctorList()
-        {
-            var doctorList = new List<UserModel>();
-            var dbDoctorList = _dbcontext.UserMaster.Include(u => u.DesignationMaster).OrderBy(d => d.FirstName).Distinct().ToList();
-
-            foreach (var item in dbDoctorList)
-            {
-                doctorList.Add(new UserModel
-                {
-                    Id = item.Id,
-                    FirstName = item.FirstName +""+ item.LastName,
-                    IsDoctor = item.IsDoctor,
-                    Designation = item.DesignationMaster.DesignationName + " ( " + item.DesignationMaster.DesignationCode + " )",
-                    
-                });
-            }
-            return doctorList;
-        }
     }
 }

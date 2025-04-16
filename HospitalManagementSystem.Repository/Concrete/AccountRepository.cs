@@ -73,28 +73,28 @@ namespace HospitalManagementSystem.Repository.Concrete
             }
         }
 
-        public List<PatientModel> GetPatientList()
-        {
-            using (AccountService accountService = new AccountService(_dBContext, _mapper))
-            {
-                return accountService.GetPatientList();
-            }
-        }
+        //public List<PatientModel> GetPatientList()
+        //{
+        //    using (AccountService accountService = new AccountService(_dBContext, _mapper))
+        //    {
+        //        return accountService.GetPatientList();
+        //    }
+        //}
 
-        public ReturnResponseModel<string> AddPatientAppointmentByUser(AddPatientAppointmentByUserInputModel addPatientAppointmentByUserInputModel)
-        {
-            using (AccountService accountService = new AccountService(_dBContext, _mapper))
-            {
-                return accountService.AddPatientAppointmentByUser(addPatientAppointmentByUserInputModel);
-            }
-        }
+        //public ReturnResponseModel<string> AddPatientAppointmentByUser(AddPatientAppointmentByUserInputModel addPatientAppointmentByUserInputModel)
+        //{
+        //    using (AccountService accountService = new AccountService(_dBContext, _mapper))
+        //    {
+        //        return accountService.AddPatientAppointmentByUser(addPatientAppointmentByUserInputModel);
+        //    }
+        //}
 
-        public List<UserModel> GetDoctorList()
-        {
-            using (AccountService accountService = new AccountService(_dBContext, _mapper))
-            {
-                return accountService.GetDoctorList();
-            }
-        }
+        //public List<UserModel> GetDoctorList()
+        //{
+        //    using (AccountService accountService = new AccountService(_dBContext, _mapper))
+        //    {
+        //        return accountService.GetDoctorList();
+        //    }
+        //}
     }
 }
